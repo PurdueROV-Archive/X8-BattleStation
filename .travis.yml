@@ -1,23 +1,24 @@
-before_install:
-    - addons:
-        apt:
-            sources:
-                - ubuntu-toolchain-r/test
-                - beineri/opt-qt55
-                - ubuntu-sdk-team/ppa
-            packages:
-                - g++-4.8
-                - libc6-i386 
-                - qt5-qmake 
-                - qt55base 
-                - qt55tools 
-                - qt55serialport 
-                - qt55svg 
-                - qt55webkit 
-                - qt55websockets
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r/test
+            - beineri/opt-qt55
+            - ubuntu-sdk-team/ppa
+        packages:
+            - g++-4.8
+            - libc6-i386 
+            - qt5-qmake 
+            - qt55base 
+            - qt55tools 
+            - qt55serialport 
+            - qt55svg 
+            - qt55webkit 
+            - qt55websockets
 
+before_install:
     - export CXX="g++-4.8"
     - export CC="gcc-4.8"
+
 script:
     - source /opt/qt55/bin/qt55-env.sh
     - qmake
