@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>view/ROVBox.qml</file>
+        <file>view/ROVButton.qml</file>
+        <file>view/ROVComboBox.qml</file>
+        <file>view/ROVMissionTask.qml</file>
+        <file>view/ROVSlider.qml</file>
+        <file>view/ROVTab.qml</file>
+        <file>view/ROVThruster.qml</file>
+        <file>view/ROVTitle.qml</file>
+        <file>view/ROVScrollBar.qml</file>
+        <file>view/ROVScrollingBox.qml</file>
+        <file>view/ROVCard.qml</file>
+        <file>view/ROVCardTab.qml</file>
+        <file>view/ROVCardTabs.qml</file>
+        <file>view/ROVRadio.qml</file>
+        <file>view/ROVCheckBox.qml</file>
+    </qresource>
+</RCC>
