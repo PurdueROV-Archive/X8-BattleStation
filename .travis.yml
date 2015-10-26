@@ -1,5 +1,5 @@
 before_install:
-    addons:
+    - addons:
         apt:
             sources:
                 - ubuntu-toolchain-r/test
