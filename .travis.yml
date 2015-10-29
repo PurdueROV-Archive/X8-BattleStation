@@ -1,12 +1,16 @@
 before_install:
-    - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test
-    - sudo apt-add-repository -y ppa:beineri/opt-qt55
-    - sudo add-apt-repository -y ppa:ubuntu-sdk-team/ppa
-    - sudo apt-get -qq update
-    - sudo apt-get -qq install g++-4.8 libc6-i386 qt5-qmake qt55base qt55tools qt55serialport qt55svg qt55webkit qt55websockets
-    - export CXX="g++-4.8"
-    - export CC="gcc-4.8"
+- sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test
+- sudo apt-add-repository -y ppa:beineri/opt-qt55
+- sudo add-apt-repository -y ppa:ubuntu-sdk-team/ppa
+- sudo apt-get -qq update
+- sudo apt-get -qq install g++-4.8 libc6-i386 qt5-qmake qt55base qt55tools qt55serialport
+  qt55svg qt55webkit qt55websockets
+- export CXX="g++-4.8"
+- export CC="gcc-4.8"
 script:
-    - source /opt/qt55/bin/qt55-env.sh
-    - qmake
-    - make
+- source /opt/qt55/bin/qt55-env.sh
+- qmake
+- make
+notifications:
+  slack:
+    secure: k1ycfw12cme7eJ2Ie0KuHC3kEl4/6vgmuzwd/KKQwEKM6VsaUFBQTNnGAxhACIm5NwvjE7/m8Z3PhMswGt7xijZ7g0iEveuYD/DHRXlYbK/V69qxi2jTF/yZLmqGSydUGoPRAP64SBTnVK2yZNB8aCtANMVFo0JWPvqxus4cMvlrD2J4uk6Xd4M19CWc3m7BV7IoG7YFMWvVVH81TC0EABvWiYPjWi9RQX6JfwMjXIEGhk7Kh+g1Rsjww8/T0vqZV/YG7ecL5Helrq0c1znnSCZ20Yh4oK6V8sFqzL7l+JHVK/9ZyMmH16ktqaEjtamgywUvjvVDTrzX/HdPN96lmxn0bcVPxrW5Tjr1B+HZkZhOTE88gclFFmFj4HDKJvKE1CtmqgmH2NqQ/wbctlTkOe0SavODw5YSSdOvGiy+jinjaBJ1bA83Ceda47Hd39QIqdJZ4qN2vtva7HTpF6Pz0E87Hz5cNT1Lc/YQxmBse3qVGxIpe9uy77iyyBq0jrlJh6YqGawzbdTY+seMF350Z0KmC1HGzR4BrlyX6lUkKe0qHwE+9oB612VW7wH64P67K561NMfhbQjKbkOjgfKl7sqYeGfDo/O6Kt5PxleDO7ASqYeQY8aXvNbAFW6B6WBGHFa101xPxzSBbk3u7RRPLEojvFY8jsv2wMcjN6oPOUI=
