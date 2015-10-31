@@ -8,6 +8,8 @@ Mainthread::Mainthread() : QObject() {
     threadTimer->setTimerType(Qt::PreciseTimer);
     threadTimer->setInterval(TICK_INTERVAL);
 
+    lastTime = 0;
+
     //Connect thredTimer timeout to tick slot
     connect(threadTimer, SIGNAL(timeout()), SLOT(tick()), Qt::DirectConnection);
 }

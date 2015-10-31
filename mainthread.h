@@ -26,7 +26,7 @@ private slots:
 
 private:
     QTimer* threadTimer;
-    qint64 lastTime = 0;
+    qint64 lastTime;
 
 };
 
