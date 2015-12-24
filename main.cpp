@@ -1,7 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "mainthread.h"
-
+/*
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
@@ -15,3 +15,4 @@ int main(int argc, char *argv[]) {
 
     return app.exec();
 }
+*/
