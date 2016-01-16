@@ -4,9 +4,6 @@ QT += core qml quick
 
 SOURCES += main.cpp \
     mainthread.cpp \
-    input/gamepad.cpp \
-    input/keyboardInput.cpp \
-    input/config.cpp \
     input/inputHandler.cpp
 
 
@@ -22,8 +19,6 @@ include(deployment.pri)
 
 HEADERS += \
     mainthread.h \
-    input/gamepad.h \
-    input/keyboardInput.h \
     input/SDL/include/begin_code.h \
     input/SDL/include/close_code.h \
     input/SDL/include/SDL.h \
@@ -104,7 +99,6 @@ HEADERS += \
     input/SDL/include/SDL_types.h \
     input/SDL/include/SDL_version.h \
     input/SDL/include/SDL_video.h \
-    input/config.h \
     input/inputHandler.h
 
 win32{

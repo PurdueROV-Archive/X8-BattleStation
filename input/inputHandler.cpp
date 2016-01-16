@@ -1,132 +1,129 @@
-/*
-Input Handler handles the Joysticks, mouse, and keyboard input.
-To use: simply create an InputHandler object and call inputHandler.handle()
+/**************************************************************************
+Input Handler manages gamepad, mouse, and keyboard input.
+
+As of 1/16/2016, I'm working on adding gamepad input. It is currently not working yet.
+
+#TO USE
+Simply create an InputHandler object, add the mapping of buttons or axis to functions, and then call handle
+
 Example:
+char[] axis = {'l','r'};
+void (*axisFuncs[])(float) = {rotateFunc, walkFunc};
+char[] buttons = {'a','b','x','y','u','d','l','r'};
+void (*buttonFuncs[])(void) = {punch, kick, dodge, slide, climbUp, climbDown, climbLeft, climbRight};
 InputHandler myInput = new InputHandler();
+myInput.addJoystickAxis(axis, axisFuncs);
+myInput.addButtons(buttons, buttonsFuncs);
 myInput.handle();
-*/
+**************************************************************************/
 #include "inputHandler.h"
-#include <stdio.h>
 
-int main()
+void rotateFunc(float rotate)
 {
-    InputHandler inputHandler;
-	inputHandler.listAvailableGamepads();
-	inputHandler.handle();
-	return 0;
+    printf("rotate by %f\n", rotate);
 }
 
-InputHandler::InputHandler()
+void walkFunc(float rotate)
 {
-	SDL_Init(SDL_INIT_JOYSTICK);
-	this->initGamepads();
+    printf("walk by %f\n", rotate);
 }
-/***************
-Checks SDL event queue for new events
-	if there is a new event, emit the right signal
-Also checks if a Joystick has been unplugged or plugged
-****************/
-bool InputHandler::handle()
+
+void punch()
 {
+    printf("Punch!");
+}
+
+void kick()
+{
+    printf("Kick!");
+}
+
+void dodge()
+{
+    printf("dodge!?");
+}
+void slide()
+{
+    printf("sliiiiide!");
+}
+void climbUp()
+{
+    printf("climbed up");
+}
+
+void climbDown()
+{
+    printf("climed down..");
+}
+
+void climbLeft()
+{
+    printf("climbing left");
+}
+
+void climbRight()
+{
+    printf("climbing right");
+}
+
+int main(void)
+{
+    char axis[] = {'l','r'};
+	void (*axisFuncs[])(float) = {rotateFunc, walkFunc};
+    char buttons[] = {'a','b','x','y','u','d','l','r'};
+	void (*buttonFuncs[])(void) = {punch, kick, dodge, slide, climbUp, climbDown, climbLeft, climbRight};
+    InputHandler myInput;
+    myInput.addJoystickAxis(axis, axisFuncs);
+    myInput.addButtons(buttons, buttonFuncs);
+    myInput.handle();
+    return 1;
+}
+
+void InputHandler::addJoystickAxis(char whichAxis[], void (*axisFunc[])(float))
+{
+	printf("placeholder\n");
+}
+
+void InputHandler::addButtons(char buttons[], void (*buttonFunc[])(void))
+{
+	printf("placeholder\n");
+}
+
+void InputHandler::handle()
+{
+	//initialize the SDL library's joystick functions
+	if(SDL_Init(SDL_INIT_JOYSTICK)<0)//if something goes wrong..
+		printf("Couldn't initialize SDL Joystick: %s\n", SDL_GetError());
+	SDL_JoystickEventState(SDL_ENABLE);//initialize SDL's event queue
 	SDL_Event event;
-	int numJoy = SDL_NumJoysticks();
+	int numJoysticks = 0;
+	int currentNumJoysticks = 0;
 	while(true)
 	{
-		if(SDL_PollEvent(&event))
+		SDL_PollEvent(&event);
+		currentNumJoysticks = SDL_NumJoysticks();
+		if(event.type == SDL_JOYDEVICEADDED)
 		{
-			switch(event.type)
+			//add all the new joysticks to our vector
+			for(int i = numJoysticks; i < currentNumJoysticks; i++)
+				activeJoysticks.push_back(SDL_JoystickOpen(i));
+			numJoysticks = currentNumJoysticks;
+		}
+		if(event.type == SDL_JOYDEVICEREMOVED)
+		{
+			//we have to iterate through the vector to see which one is closed and remove it
+			for(int i = 0; i < numJoysticks; i++)
 			{
-				case SDL_JOYAXISMOTION:
-					printf("Axis motion detected\n");
-					break;
-				case SDL_JOYBALLMOTION:
-					printf("Joy ball motion detected\n");
-					break;
-				case SDL_JOYHATMOTION:
-					printf("Joy hat motion detected\n");
-					break;
-				case SDL_JOYBUTTONUP:
-					printf("Button up detected\n");
-					break;
-				case SDL_JOYBUTTONDOWN:
-					printf("Button down detected\n");
-					break;
+                //if(activeJoysticks[i]->closed > 0)
+                    //	activeJoysticks.erase(i);
+                printf("don't know how to do remove\n");
 			}
-		}
-		if(SDL_NumJoysticks()>numJoy)
-		{
-			numJoy = SDL_NumJoysticks();
-            this->addGamepad(SDL_NumJoysticks()-1);
-		}
-		if(SDL_NumJoysticks()<numJoy)
-		{
-			numJoy = SDL_NumJoysticks();
-			for(int i = 0; i < numJoy; i++)
-			{
-                if(!SDL_JoystickOpened(i))
-					connectedGamepads.erase(i);
-			}
-		}
-	}
-	return true;
-}
 
-bool InputHandler::addGamepad(int id)
-{
-	Gamepad newJoystick = new Gamepad(SDL_JoystickOpen(id));
-	connectedGamepads.push_back(newJoystick);
-}
-
-bool InputHandler::initGamepads()
-{
-	int numJoysticks = SDL_NumJoysticks();
-	if(numJoysticks>0)
-	{
-		SDL_Joystick Joysticks[] = new int[numJoysticks];
-		for(int i = 0; i < numJoysticks; i++)
-		{
-			Joysticks[i] = SDL_JoystickOpen(i);
-			printf("ID: %d\n", i);
-			printf("Name: %s\n", SDL_JoystickName(i));
-			printf("Number of Axes: %d\n", SDL_JoystickNumAxes(i));
-			printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(i));
-			printf("Number of Balls: %d\n", SDL_JoystickNumBalls(i));
 		}
-	}
-	else
-		printf("No Joysticks connected to this computer\n");
-	for(int i = 0; i < numJoysticks; i++)
-		SDL_JoystickClose(Joysticks[i]);	
-}
-
-bool InputHandler::listAvailableGamepads()
-{
-	int numJoysticks = SDL_NumJoysticks();
-	if(numJoysticks>0)
-	{
-		SDL_Joystick Joysticks[] = new int[numJoysticks];
-		for(int i = 0; i < numJoysticks; i++)
+	//check for events
+		while(SDL_PollEvent(&event))
 		{
-			Joysticks[i] = SDL_JoystickOpen(i);
-			printf("ID: %d\n", i);
-			printf("Name: %s\n", SDL_JoystickName(i));
-			printf("Number of Axes: %d\n", SDL_JoystickNumAxes(i));
-			printf("Number of Buttons: %d\n", SDL_JoystickNumButtons(i));
-			printf("Number of Balls: %d\n", SDL_JoystickNumBalls(i));
-		}
-	}
-	else
-		printf("No Joysticks connected to this computer\n");
-	for(int i = 0; i < numJoysticks; i++)
-		SDL_JoystickClose(Joysticks[i]);
-}
 
-InputHandler::~InputHandler()
-{
-	int numJoysticks = SDL_NumJoysticks();
-	for(int i = 0; i < numJoysticks; i++)
-	{
-		SDL_JoystickClose(Joysticks[i]);
-		delete connectedGamepads.get(i);
+		}
 	}
 }

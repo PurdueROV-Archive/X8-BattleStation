@@ -4,21 +4,17 @@
 #include <QStringList>
 #include "SDL.h"
 #include <vector>
-#include "gamepad.h"
 
 class InputHandler : public QObject
 {
 	Q_OBJECT
 public:
-	explicit InputHandler();
-	bool addGamepad(int id);//adds a gamepad (as in make it usable in the BattleStation)
-	bool listAvailableGamepads();//lists available gamepads connected to the computer
-    bool handle();//constantly polls for events
-	~InputHandler();
+    //explicit InputHandler();
+    void addJoystickAxis(char whichAxis[], void (*axisFunc[])(float));
+    void addButtons(char buttons[], void (*buttonFunc[])(void));
+    void handle();
+    //~InputHandler();
 
 private:
-    bool initGamepads();
-	std::vector<Gamepad> connectedGamepads;
-	std::vector<int> availableGamepads;
-    //std::vector<std::vector<>> availableConfigs;
+	std::vector<SDL_Joystick*> activeJoysticks;
 };
