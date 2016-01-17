@@ -68,25 +68,26 @@ void climbRight()
 
 int main(void)
 {
-    char axis[] = {'l','r'};
+    //char axis[] = {'l','r'};
 	void (*axisFuncs[])(float) = {rotateFunc, walkFunc};
-    char buttons[] = {'a','b','x','y','u','d','l','r'};
+    //char buttons[] = {'a','b','x','y','u','d','l','r'};
 	void (*buttonFuncs[])(void) = {punch, kick, dodge, slide, climbUp, climbDown, climbLeft, climbRight};
     InputHandler myInput;
-    myInput.addJoystickAxis(axis, axisFuncs);
-    myInput.addButtons(buttons, buttonFuncs);
+    myInput.addJoystickAxis(axisFuncs);
+    myInput.addButtons(buttonFuncs);
     myInput.handle();
     return 1;
 }
 
-void InputHandler::addJoystickAxis(char whichAxis[], void (*axisFunc[])(float))
+void InputHandler::addJoystickAxis(void (*axisFunc[])(float))
 {
-	printf("placeholder\n");
+    this->axisFunc = new (*axisFunc[axisFunc.length])(float);
+    this->axisFunc = axisFunc;
 }
 
-void InputHandler::addButtons(char buttons[], void (*buttonFunc[])(void))
+void InputHandler::addButtons(void (*buttonFunc[])(void))
 {
-	printf("placeholder\n");
+    this->buttonFunc = buttonFunc;
 }
 
 void InputHandler::handle()
@@ -105,14 +106,14 @@ void InputHandler::handle()
 		if(event.type == SDL_JOYDEVICEADDED)
 		{
 			//add all the new joysticks to our vector
-			for(int i = numJoysticks; i < currentNumJoysticks; i++)
+			for(int i = numJoysticks; i < currentNumJoysticks; ++i)
 				activeJoysticks.push_back(SDL_JoystickOpen(i));
 			numJoysticks = currentNumJoysticks;
 		}
 		if(event.type == SDL_JOYDEVICEREMOVED)
 		{
 			//we have to iterate through the vector to see which one is closed and remove it
-			for(int i = 0; i < numJoysticks; i++)
+			for(int i = 0; i < numJoysticks; ++i)
 			{
                 //if(activeJoysticks[i]->closed > 0)
                     //	activeJoysticks.erase(i);
@@ -123,7 +124,15 @@ void InputHandler::handle()
 	//check for events
 		while(SDL_PollEvent(&event))
 		{
-
+			switch(event.type)
+			{
+                case SDL_JOYBUTTONDOWN:
+                    buttonFuncs[event.jbutton.button]();
+                    break;
+                case SDL_JOYAXISMOTION:
+                    axisFuncs[event.jaxis.axis]((SDL_JoyAxisEvent*)event.value);
+                    break;
+			}
 		}
 	}
 }
