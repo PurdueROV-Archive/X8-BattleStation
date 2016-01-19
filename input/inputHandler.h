@@ -3,23 +3,23 @@
 #include <QDebug>
 #include <QStringList>
 #include "SDL.h"
-#undef main
+#undef main//bc SDL defines main and causes an error
 #include <vector>
 
 class InputHandler : public QObject
 {
-	Q_OBJECT
-    typedef void (*axisFunc)(float);
-    typedef void (*buttonFunc)(void);
+    Q_OBJECT//needed for Qt framework
+    typedef void (*axisFunc)(float);//to make function pointers work with vectors
+    typedef void (*buttonFunc)(void);//^
 public:
     //explicit InputHandler();
-    void addJoystickAxis(std::vector<axisFunc> axisFunctions);
-    void addButtons(std::vector<buttonFunc> buttonFunctions);
-    void handle();
+    void addJoystickAxis(std::vector<axisFunc> axisFunctions);//maps the functions to axis
+    void addButtons(std::vector<buttonFunc> buttonFunctions);//maps the functions to buttons
+    void handle();//initializes and runs main event loop
     //~InputHandler();
 
 private:
-	std::vector<SDL_Joystick*> activeJoysticks;
-    std::vector<axisFunc> axisFunctions;
-    std::vector<buttonFunc> buttonFunctions;
+    std::vector<SDL_Joystick*> activeJoysticks;//vector of active joysticks
+    std::vector<axisFunc> axisFunctions;//vector of functions mapped to axes
+    std::vector<buttonFunc> buttonFunctions;//vector of functions mapped to buttons
 };
