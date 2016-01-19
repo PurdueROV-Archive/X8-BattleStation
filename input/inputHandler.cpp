@@ -98,49 +98,49 @@ void InputHandler::addButtons(std::vector<buttonFunc> buttonFunctions)
     this->buttonFunctions = buttonFunctions;
 }
 
-void InputHandler::handle()
+InputHandler::InputHandler()
 {
 	//initialize the SDL library's joystick functions
 	if(SDL_Init(SDL_INIT_JOYSTICK)<0)//if something goes wrong..
 		printf("Couldn't initialize SDL Joystick: %s\n", SDL_GetError());
 	SDL_JoystickEventState(SDL_ENABLE);//initialize SDL's event queue
-	SDL_Event event;
-	int numJoysticks = 0;
-	int currentNumJoysticks = 0;
-	while(true)
-	{
-		SDL_PollEvent(&event);
-		currentNumJoysticks = SDL_NumJoysticks();
-		if(event.type == SDL_JOYDEVICEADDED)
-		{
-			//add all the new joysticks to our vector
-			for(int i = numJoysticks; i < currentNumJoysticks; ++i)
-				activeJoysticks.push_back(SDL_JoystickOpen(i));
-			numJoysticks = currentNumJoysticks;
-		}
-		if(event.type == SDL_JOYDEVICEREMOVED)
-		{
-			//we have to iterate through the vector to see which one is closed and remove it
-			for(int i = 0; i < numJoysticks; ++i)
-			{
-                //if(activeJoysticks[i]->closed > 0)
-                    //	activeJoysticks.erase(i);
-                printf("don't know how to do remove\n");
-			}
+	numJoysticks = 0;
+	currentNumJoysticks = 0;
+}
 
-		}
-	//check for events
-		while(SDL_PollEvent(&event))
+void InputHandler::handle()
+{
+	SDL_PollEvent(&event);
+	currentNumJoysticks = SDL_NumJoysticks();
+	if(event.type == SDL_JOYDEVICEADDED)
+	{
+		//add all the new joysticks to our vector
+		for(int i = numJoysticks; i < currentNumJoysticks; ++i)
+			activeJoysticks.push_back(SDL_JoystickOpen(i));
+		numJoysticks = currentNumJoysticks;
+	}
+	if(event.type == SDL_JOYDEVICEREMOVED)
+	{
+		//we have to iterate through the vector to see which one is closed and remove it
+		for(int i = 0; i < numJoysticks; ++i)
 		{
-			switch(event.type)
-			{
-                case SDL_JOYBUTTONDOWN:
-                    this->buttonFunctions[event.jbutton.button]();
-                    break;
-                case SDL_JOYAXISMOTION:
-                    this->axisFunctions[event.jaxis.axis](event.jaxis.value);
-                    break;
-			}
+            //if(activeJoysticks[i]->closed > 0)
+                //	activeJoysticks.erase(i);
+            printf("don't know how to do remove\n");
+		}
+
+	}
+//check for events
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+            case SDL_JOYBUTTONDOWN:
+                this->buttonFunctions[event.jbutton.button]();
+                break;
+            case SDL_JOYAXISMOTION:
+                this->axisFunctions[event.jaxis.axis](event.jaxis.value);
+                break;
 		}
 	}
 }
