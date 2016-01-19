@@ -14,8 +14,11 @@ initInputHandler()
 		if so
 			call function
 
+a vector of SDL_Joystick* will be used to hold joysticks
 
-			
+
+
+
 
 
 Questions

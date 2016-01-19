@@ -3,20 +3,23 @@
 #include <QDebug>
 #include <QStringList>
 #include "SDL.h"
+#undef main
 #include <vector>
 
 class InputHandler : public QObject
 {
 	Q_OBJECT
+    typedef void (*axisFunc)(float);
+    typedef void (*buttonFunc)(void);
 public:
     //explicit InputHandler();
-    void addJoystickAxis(void (*axisFunc[])(float));
-    void addButtons(void (*buttonFunc[])(void));
+    void addJoystickAxis(std::vector<axisFunc> axisFunctions);
+    void addButtons(std::vector<buttonFunc> buttonFunctions);
     void handle();
     //~InputHandler();
 
 private:
 	std::vector<SDL_Joystick*> activeJoysticks;
-    void (**axisFunc)(float);
-    void (**buttonFunc)(void);
+    std::vector<axisFunc> axisFunctions;
+    std::vector<buttonFunc> buttonFunctions;
 };

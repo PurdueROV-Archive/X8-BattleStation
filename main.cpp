@@ -6,6 +6,7 @@
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
 
+
     //TODO: Start and stop main thread via QML
     Mainthread* t = new Mainthread();
     t->start();

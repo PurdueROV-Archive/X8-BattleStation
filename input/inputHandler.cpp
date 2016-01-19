@@ -65,29 +65,28 @@ void climbRight()
 {
     printf("climbing right");
 }
-
+/*
 int main(void)
 {
-    //char axis[] = {'l','r'};
-	void (*axisFuncs[])(float) = {rotateFunc, walkFunc};
-    //char buttons[] = {'a','b','x','y','u','d','l','r'};
-	void (*buttonFuncs[])(void) = {punch, kick, dodge, slide, climbUp, climbDown, climbLeft, climbRight};
+    typedef void(*axisFunc)(float);
+    typedef void(*buttonFunc)(void);
+    std::vector<axisFunc> myAxisFuncs = {rotateFunc, walkFunc};
+    std::vector<buttonFunc> myButtonFuncs = {punch, kick, dodge, slide, climbUp, climbDown, climbLeft, climbRight};
     InputHandler myInput;
-    myInput.addJoystickAxis(axisFuncs);
-    myInput.addButtons(buttonFuncs);
+    myInput.addJoystickAxis(myAxisFuncs);
+    myInput.addButtons(myButtonFuncs);
     myInput.handle();
     return 1;
+}*/
+
+void InputHandler::addJoystickAxis(std::vector<axisFunc> axisFunctions)
+{
+    this->axisFunctions = axisFunctions;
 }
 
-void InputHandler::addJoystickAxis(void (*axisFunc[])(float))
+void InputHandler::addButtons(std::vector<buttonFunc> buttonFunctions)
 {
-    this->axisFunc = new (*axisFunc[axisFunc.length])(float);
-    this->axisFunc = axisFunc;
-}
-
-void InputHandler::addButtons(void (*buttonFunc[])(void))
-{
-    this->buttonFunc = buttonFunc;
+    this->buttonFunctions = buttonFunctions;
 }
 
 void InputHandler::handle()
@@ -127,10 +126,10 @@ void InputHandler::handle()
 			switch(event.type)
 			{
                 case SDL_JOYBUTTONDOWN:
-                    buttonFuncs[event.jbutton.button]();
+                    this->buttonFunctions[event.jbutton.button]();
                     break;
                 case SDL_JOYAXISMOTION:
-                    axisFuncs[event.jaxis.axis]((SDL_JoyAxisEvent*)event.value);
+                    this->axisFunctions[event.jaxis.axis](event.jaxis.value);
                     break;
 			}
 		}
