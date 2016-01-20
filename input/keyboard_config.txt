@@ -1,0 +1,32 @@
+/*
+The Battlestation reads this file to set up which buttons do what.
+Things between /**/ are not read by the Battlestation.
+Lines with // are not read by the Battlestation
+If there is a syntax error, the Battlestation will print out an error message and load defaults.
+
+#SYNTAX:
+ACTION = KEYBOARD CHARACTER
+
+For example:
+
+    TOGGLE_LEFT_CAMERA = X
+
+#SPECIAL CHARACTERS:
+f1 to f12 = f# (for example f1 is f1)
+Shift = SHIFT
+Caps Lock = CAPSLOCK
+Backspace = BACKSPACE
+Space Bar = SPACE
+ESC = ESCAPE
+Tab = TAB
+
+#MULTIPLE KEYS AT THE SAME TIME:
+"+" means that you have to hold the two keys at the same time.
+
+For example:
+
+    TOGGLE_LEFT_CAMERA = SHIFT+X
+
+For example, setting something to SHIFT+A means you have to hold down SHIFT and A to activate it.
+You can make as many combinations as possible, but I don't recommend more than two.
+*/
