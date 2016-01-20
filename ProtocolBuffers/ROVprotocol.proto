@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message ControlPacket {
+
+	repeated int32 thruster1 = 1;
+	repeated int32 thruster2 = 2;
+	repeated int32 thruster3 = 3;
+	repeated int32 thruster4 = 4;
+	repeated int32 thruster5 = 5;
+	repeated int32 thruster6 = 6;
+	repeated int32 thruster7 = 7;
+	repeated int32 thruster8 = 8;
+
+	repeated bool claw_on = 9;
+}
