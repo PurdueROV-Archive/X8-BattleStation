@@ -3,7 +3,9 @@ TEMPLATE = app
 QT += core qml quick
 
 SOURCES += main.cpp \
-    mainthread.cpp
+    mainthread.cpp \
+    input/inputHandler.cpp
+
 
 RESOURCES += qml.qrc
 
@@ -16,4 +18,18 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    mainthread.h
+    mainthread.h \
+    input/inputHandler.h
+
+win32{
+    INCLUDEPATH += $$PWD/input/SDL/include
+    DEPENDPATH += $$PWD/input/SDL/include
+    LIBS += -L$$PWD/input/SDL/lib/win32/ -lSDL2
+    #will do the fancy stuff you guys did in Cerulean-BattleStation after I get this working first
+}
+
+linux-g++ {
+    LIBS += -L$$PWD/input/SDL/lib/x64/ -lSDL2
+    INCLUDEPATH += $$PWD/input/SDL/include
+    DEPENDPATH += $$PWD/input/SDL/include
+}
