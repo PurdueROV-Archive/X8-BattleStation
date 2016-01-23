@@ -98,6 +98,20 @@ void InputHandler::addButtons(std::vector<buttonFunc> buttonFunctions)
     this->buttonFunctions = buttonFunctions;
 }
 
+void InputHandler::addToggleButtons(std::vector<toggleFunc> toggleFunctions, std::vector<int> numStates)
+{
+    int toggleFunctionsSize = toggleFunctions.size();
+    if(toggleFunctionsSize!=numStates.size())
+    {
+        printf("Error in addToggleButtons: toggleFunctions and numStates do not have the same number of elements inside\n");
+        return;
+    }
+    this->toggleFunctions = toggleFunctions;
+    this->toggleNumStates = numStates;
+    for(int i = 0; i < toggleFunctionsSize; i++)
+        this->toggleCurrentStates.push_back(0);
+}
+
 InputHandler::InputHandler()
 {
 	//initialize the SDL library's joystick functions
@@ -140,6 +154,13 @@ void InputHandler::handle()
                 break;
             case SDL_JOYAXISMOTION:
                 this->axisFunctions[event.jaxis.axis](event.jaxis.value);
+                break;
+            case SDL_JOYBUTTONUP:
+                //update state
+                int button = event.jbutton.button;//makes the code cleaner to read
+                //updates state: currentState = currentState+1 % numStates
+                this->toggleCurrentStates[button] = (this->toggleCurrentStates[button]+1)%(this->toggleNumStates[button]);
+                this->toggleFunctions[button](this->toggleNumStates[button]);
                 break;
 		}
 	}
