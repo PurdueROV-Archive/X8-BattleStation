@@ -24,7 +24,7 @@ HEADERS += \
 win32{
     INCLUDEPATH += $$PWD/input/SDL/include
     DEPENDPATH += $$PWD/input/SDL/include
-    LIBS += -L$$PWD/input/SDL/lib/win32/ -lSDL2
+    LIBS += -L$$PWD/input/SDL/lib/x86/ -lSDL2
     #will do the fancy stuff you guys did in Cerulean-BattleStation after I get this working first
 }
 
