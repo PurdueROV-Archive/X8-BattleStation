@@ -4,7 +4,8 @@ QT += core qml quick
 
 SOURCES += main.cpp \
     mainthread.cpp \
-    input/inputHandler.cpp
+    input/inputHandler.cpp \
+    udpsocket.cpp
 
 
 RESOURCES += qml.qrc
@@ -19,7 +20,8 @@ include(deployment.pri)
 
 HEADERS += \
     mainthread.h \
-    input/inputHandler.h
+    input/inputHandler.h \
+    udpsocket.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include

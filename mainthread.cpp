@@ -16,8 +16,8 @@ Mainthread::Mainthread() : QObject() {
 
 Mainthread::~Mainthread() {
     if (threadTimer) {
-            threadTimer->stop();
-            delete threadTimer;
+        threadTimer->stop();
+        delete threadTimer;
     }
 }
 
@@ -27,6 +27,10 @@ bool Mainthread::start() {
     //TODO: Check if joysticks are connected, can connet to microcontroller, etc
     threadTimer->start();
     //initialize stuff here
+
+    udp = new UDPSocket();
+    udp->initSocket(QHostAddress::LocalHost, 53456);
+
     return true;
 }
 
@@ -44,7 +48,10 @@ void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     qDebug() << now-lastTime;
 
-     lastTime = now;
+    udp->send(QByteArray("Data"));
+    udp->read();
 
-     //TODO: Add code for each tick
+    lastTime = now;
+
+    //TODO: Add code for each tick
 }

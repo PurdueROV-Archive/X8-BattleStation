@@ -6,7 +6,9 @@
 #include <QDebug>
 #include <QDateTime>
 
-#define TICK_INTERVAL 10
+#include "udpsocket.h"
+
+#define TICK_INTERVAL 1000
 
 class Mainthread : public QObject
 {
@@ -27,6 +29,7 @@ private slots:
 private:
     QTimer* threadTimer;
     qint64 lastTime;
+    UDPSocket* udp;
 
 };
 
