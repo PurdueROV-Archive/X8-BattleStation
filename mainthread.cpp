@@ -26,7 +26,7 @@ bool Mainthread::start() {
 
     //TODO: Check if joysticks are connected, can connet to microcontroller, etc
     threadTimer->start();
-
+    //initialize stuff here
     return true;
 }
 
@@ -34,10 +34,12 @@ bool Mainthread::start() {
 //Stop the mainthread
 void Mainthread::stop() {
     threadTimer->stop();
+    //closing stuff here
 }
 
 
 //Called after TICK_INTERVAL milliseconds
+//main while loop where it ticks every 10ms
 void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     qDebug() << now-lastTime;
