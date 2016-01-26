@@ -23,15 +23,27 @@ HEADERS += \
     input/inputHandler.h \
     testInputHandler.h
 
-win32{
+win32 {
     INCLUDEPATH += $$PWD/input/SDL/include
     DEPENDPATH += $$PWD/input/SDL/include
-    LIBS += -L$$PWD/input/SDL/lib/x86/ -lSDL2
-    #will do the fancy stuff you guys did in Cerulean-BattleStation after I get this working first
+
+    !contains(QMAKE_TARGET.arch, x86_64) {
+        #x86 / 32-bit Windows define
+        LIBS += -L$$PWD/input/SDL/lib/x86/ -lSDL2
+    } else {
+        #x86_64 / 64-bit Window define
+        LIBS += -L$$PWD/input/SDL/lib/x64/ -lSDL2
+    }
 }
 
 linux-g++ {
     LIBS += -L$$PWD/input/SDL/lib/x64/ -lSDL2
     INCLUDEPATH += $$PWD/input/SDL/include
     DEPENDPATH += $$PWD/input/SDL/include
+}
+
+macx {
+    INCLUDEPATH += $$PWD/input/SDL/include
+    INCLUDEPATH += -F/Library/Frameworks
+    QMAKE_LFLAGS += -F/Library/Frameworks/ -framework SDL2
 }
