@@ -1,4 +1,8 @@
 #include "mainthread.h"
+#include "input/inputHandler.h"
+#include "testInputHandler.h"
+
+InputHandler* myInput;
 
 Mainthread::Mainthread() : QObject() {
 
@@ -27,14 +31,15 @@ bool Mainthread::start() {
     //TODO: Check if joysticks are connected, can connet to microcontroller, etc
     threadTimer->start();
     //initialize stuff here
+    myInput = new InputHandler();
     return true;
 }
-
 
 //Stop the mainthread
 void Mainthread::stop() {
     threadTimer->stop();
     //closing stuff here
+    delete myInput;
 }
 
 
@@ -43,8 +48,7 @@ void Mainthread::stop() {
 void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     qDebug() << now-lastTime;
-
-     lastTime = now;
-
-     //TODO: Add code for each tick
+    myInput->handle();
+    lastTime = now;
+    //TODO: Add code for each tick
 }

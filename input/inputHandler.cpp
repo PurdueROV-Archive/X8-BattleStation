@@ -100,7 +100,7 @@ void InputHandler::handle()
 		}
 	}
 //check for events
-	while(SDL_PollEvent(&event))
+	while(SDL_PollEvent(&event))//while there are events in the event queue that still need to be processed
 	{
 		switch(event.type)
 		{
