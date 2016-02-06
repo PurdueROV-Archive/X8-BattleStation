@@ -4,7 +4,12 @@ QT += core qml quick
 
 SOURCES += main.cpp \
     mainthread.cpp \
-    input/inputHandler.cpp
+    udpsocket.cpp \
+    controller.cpp \
+    controlpacket.cpp \
+    model.cpp \
+    joystick.cpp \
+    sdlwrap.cpp
 
 
 RESOURCES += qml.qrc
@@ -19,7 +24,12 @@ include(deployment.pri)
 
 HEADERS += \
     mainthread.h \
-    input/inputHandler.h
+    udpsocket.h \
+    controller.h \
+    controlpacket.h \
+    model.h \
+    joystick.h \
+    sdlwrap.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include

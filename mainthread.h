@@ -6,6 +6,10 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "udpsocket.h"
+#include "joystick.h"
+#include "controlpacket.h"
+
 #define TICK_INTERVAL 10
 
 class Mainthread : public QObject
@@ -14,7 +18,7 @@ class Mainthread : public QObject
 
 
 public:
-    Mainthread();
+    Mainthread(Joystick* joystick1);
     ~Mainthread();
 
     bool start();
@@ -27,6 +31,9 @@ private slots:
 private:
     QTimer* threadTimer;
     qint64 lastTime;
+    UDPSocket* udp;
+    Joystick* joystick1;
+
 
 };
 

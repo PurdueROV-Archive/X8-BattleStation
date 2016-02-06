@@ -1,6 +1,6 @@
 #include "mainthread.h"
 
-Mainthread::Mainthread() : QObject() {
+Mainthread::Mainthread(Joystick *joystick1) : QObject() {
 
     //TODO: Pass in other needed objects
 
@@ -10,14 +10,16 @@ Mainthread::Mainthread() : QObject() {
 
     lastTime = 0;
 
+    this->joystick1 = joystick1;
+
     //Connect thredTimer timeout to tick slot
     connect(threadTimer, SIGNAL(timeout()), SLOT(tick()), Qt::DirectConnection);
 }
 
 Mainthread::~Mainthread() {
     if (threadTimer) {
-            threadTimer->stop();
-            delete threadTimer;
+        threadTimer->stop();
+        delete threadTimer;
     }
 }
 
@@ -27,6 +29,10 @@ bool Mainthread::start() {
     //TODO: Check if joysticks are connected, can connet to microcontroller, etc
     threadTimer->start();
     //initialize stuff here
+
+    udp = new UDPSocket();
+    udp->initSocket("192.168.1.100", 5100);
+
     return true;
 }
 
@@ -34,6 +40,8 @@ bool Mainthread::start() {
 //Stop the mainthread
 void Mainthread::stop() {
     threadTimer->stop();
+    udp->closeSocket();
+
     //closing stuff here
 }
 
@@ -42,9 +50,22 @@ void Mainthread::stop() {
 //main while loop where it ticks every 10ms
 void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
-    qDebug() << now-lastTime;
+    //qDebug() << now-lastTime;
 
-     lastTime = now;
+    ControlPacket* cp = new ControlPacket();
+    //cp->print();
 
-     //TODO: Add code for each tick
+    udp->send(cp->getPacket());
+    QByteArray returnData = udp->read();
+
+    if (returnData.size() > 0) {
+        for (int i = 0; i < 30; ++i) {
+            qDebug("[%d]: %c", i, (quint8) returnData.at(i));
+        }
+    }
+
+
+    lastTime = now;
+
+    //TODO: Add code for each tick
 }
