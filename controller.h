@@ -40,7 +40,7 @@ public:
     void SetRunning(bool running); //Write Property
 
 private: //Dependencies
-    bool running = false;
+    bool running;
 
 signals: //Signal to emit on change
     void RunningChanged();

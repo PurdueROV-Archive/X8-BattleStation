@@ -13,7 +13,9 @@ Controller* Controller::getInstance() {
 
     if (instance == NULL) {
         instance = new Controller();
+		instance->running = false;
     }
+
 
     return instance;
 }
