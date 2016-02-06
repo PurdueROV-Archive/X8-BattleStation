@@ -83,13 +83,16 @@ Window {
             anchors.left: mainGrid.left
             anchors.leftMargin: 0
 
+            ROVView.GUITimer{}
+
             ROVView.ROVCard {
                 title: "Card 1"
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: parent.height
+                height: parent.height - 150
                 headerColor: mainColor
             }
+
         }
 
         //Center Column
@@ -111,6 +114,7 @@ Window {
                 height: parent.height
                 headerColor: mainColor
             }
+
         }
 
         //Right Column
@@ -129,9 +133,11 @@ Window {
                 title: "Card 3"
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: parent.height
+                height: parent.height/2
                 headerColor: mainColor
             }
+
+            ROVView.GUIConfiguration{}
         }
     }
 }

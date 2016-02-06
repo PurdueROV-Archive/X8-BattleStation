@@ -12,16 +12,15 @@ class UDPSocket : public QObject
 public:
     UDPSocket();
 
-    void initSocket(QHostAddress addr, quint16 port);
+    void initSocket(QString addr, quint16 port);
     void send(QByteArray data);
-    void read();
+    void closeSocket();
+    QByteArray read();
 
 
 private:
-    QUdpSocket*  socket;
+    QUdpSocket* socket;
 
-private slots:
-    void onData();
 };
 
 #endif // UDPSOCKET_H

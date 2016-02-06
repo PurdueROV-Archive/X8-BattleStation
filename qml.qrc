@@ -16,5 +16,7 @@
         <file>view/ROVCardTabs.qml</file>
         <file>view/ROVRadio.qml</file>
         <file>view/ROVCheckBox.qml</file>
+        <file>view/GUITimer.qml</file>
+        <file>view/GUIConfiguration.qml</file>
     </qresource>
 </RCC>
