@@ -9,7 +9,7 @@ ROVCard {
     anchors.right: parent.right
     anchors.margins: 0
 
-    height: (parent.height/2) - 10
+    height: (parent.height/2)
 
     title: "Configuration"
     headerColor: mainColor

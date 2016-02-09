@@ -14,7 +14,7 @@ Item {
 
     Rectangle {
         id: background
-        radius: 3
+        radius: 4
         anchors.fill: parent
         clip: true
 
@@ -23,6 +23,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             color: "white"
+            radius: 4
             opacity: (ma.containsMouse) ? 0.3 : 0.0
             Behavior on opacity {NumberAnimation {duration: 300}}
         }
@@ -69,7 +70,7 @@ Item {
         anchors.horizontalCenter: rovButton.horizontalCenter
         anchors.top: rovButton.top
         anchors.topMargin: (ma.pressed) ? 6 : 3
-        radius: 5
+        radius: 4
         color: "#30000000"
 
         opacity: (ma.containsMouse) ? 1 : 0.0
@@ -86,6 +87,7 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         anchors.verticalCenter: rovButton.verticalCenter
         width: rovButton.width
+        font.weight: Font.Thin
     }
 
 

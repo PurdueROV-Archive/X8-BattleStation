@@ -39,7 +39,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.leftMargin: 20
             anchors.topMargin: 8
-            font.bold: true
+            font.weight: Font.Thin
             antialiasing: true
         }
     }
@@ -57,12 +57,14 @@ Rectangle {
     Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: header.bottom
-        height: 10
-        gradient: Gradient {
-             GradientStop { position: 0.0; color: "#33000000" }
-             GradientStop { position: 1.0; color: "#00000000" }
-         }
+        anchors.bottom: header.bottom
+        height: 2
+        color: "black"
+        opacity: 0.3
+//        gradient: Gradient {
+//             GradientStop { position: 0.0; color: "#33000000" }
+//             GradientStop { position: 1.0; color: "#00000000" }
+//         }
     }
 
 }
