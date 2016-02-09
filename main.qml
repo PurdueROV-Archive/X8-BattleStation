@@ -7,11 +7,12 @@ import QtQuick.Controls.Styles 1.0
 import "view" as ROVView
 
 Window {
-    property string rovName: "X8"
-    property string cerulean: "#6D9BC3"
-    property string teal:     "#00BCD4"
-    property string amber:    "#FFC107"
-    property string mainColor: "#455A64"
+    property string rovName:   "X8"
+    property string cerulean:  "#6D9BC3"
+    property string teal:      "#00BCD4"
+    property string amber:     "#FFC107"
+    property string slate:     "#455A64"
+    property string mainColor:  slate
     property string mainAccent: amber
 
     id: mainWindow
@@ -38,18 +39,17 @@ Window {
             color: "white"
             verticalAlignment: Text.AlignVCenter
 
-            text: "Purdue IEEE | ROV " + rovName + " BattleStation"
+            text: "BattleStation"
+            font.weight: Font.Thin
         }
 
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.top: actionBar.bottom
-            height: 20
-            gradient: Gradient {
-                 GradientStop { position: 0.0; color: "#33000000" }
-                 GradientStop { position: 1.0; color: "#00000000" }
-             }
+            anchors.bottom: actionBar.bottom
+            height: 5
+            color: "black"
+            opacity: 0.2
         }
     }
 
@@ -86,10 +86,10 @@ Window {
             ROVView.GUITimer{}
 
             ROVView.ROVCard {
-                title: "Card 1"
+                title: "Mission Tasks"
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: parent.height - 150
+                height: parent.height - 110
                 headerColor: mainColor
             }
 
@@ -108,10 +108,18 @@ Window {
             anchors.horizontalCenter: parent.horizontalCenter
 
             ROVView.ROVCard {
-                title: "Card 2"
+                title: "Telemetry"
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: parent.height
+                height: parent.height/2
+                headerColor: mainColor
+            }
+
+            ROVView.ROVCard {
+                title: "Control Configuration"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: parent.height/2
                 headerColor: mainColor
             }
 
@@ -130,7 +138,7 @@ Window {
             anchors.rightMargin: 0
 
             ROVView.ROVCard {
-                title: "Card 3"
+                title: "System Status"
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: parent.height/2
