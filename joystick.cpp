@@ -34,6 +34,8 @@ bool Joystick::connect() {
     numAxes = getNumAxes();
     numButtons = getNumButtons();
 
+    qDebug() << numAxes;
+
     for (int i = 0; i < numAxes; i++) {
         axes.append(0);
     }

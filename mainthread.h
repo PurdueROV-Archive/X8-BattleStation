@@ -9,6 +9,8 @@
 #include "udpsocket.h"
 #include "joystick.h"
 #include "controlpacket.h"
+#include "thrust_mapping/matrices.h"
+#include "thrust_mapping/thrust_mapper.h"
 
 #define TICK_INTERVAL 10
 
@@ -33,6 +35,7 @@ private:
     qint64 lastTime;
     UDPSocket* udp;
     Joystick* joystick1;
+    ThrustMapper* thrustMapper;
 
 
 };

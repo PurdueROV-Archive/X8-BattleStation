@@ -33,6 +33,8 @@ bool Mainthread::start() {
     udp = new UDPSocket();
     udp->initSocket("192.168.1.100", 5100);
 
+    thrustMapper = new ThrustMapper();
+
     return true;
 }
 
@@ -51,6 +53,13 @@ void Mainthread::stop() {
 void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     //qDebug() << now-lastTime;
+
+//    qDebug() << joystick1->getAxis(0);
+//    qDebug() << joystick1->getAxis(1);
+//    qDebug() << joystick1->getAxis(2);
+//    qDebug() << joystick1->getAxis(3);
+//    qDebug() << joystick1->getAxis(4);
+//    qDebug() << joystick1->getAxis(5);
 
     ControlPacket* cp = new ControlPacket();
     //cp->print();

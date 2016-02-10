@@ -43,6 +43,9 @@ void Model::refreshList() {
 }
 
 void Model::selectJoystick1(int index) {
+    qDebug() << index;
+    qDebug() << joystick1;
+    qDebug() << joystick1->getNumAxes();
     joystick1->select(index);
 }
 
