@@ -31,6 +31,11 @@ void UDPSocket::closeSocket() {
 }
 
 QByteArray UDPSocket::read() {
+
+    if (socket == NULL || !socket || socket->state() == QUdpSocket::UnconnectedState) {
+        return NULL;
+    }
+
     if (socket->hasPendingDatagrams()) {
         return socket->read(30);
     }
