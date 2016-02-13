@@ -27,6 +27,7 @@ void Controller::init() {
     }
 
     joystickDevices = SdlWrap::getJoystickList();
+    thrusterValues = QStringList();
 
     joystick = new Joystick();
 

@@ -104,7 +104,7 @@ public:
     void SetThrusterValues(int values[]);
 
 private: //Dependencies
-    QStringList thrusterValues = {"Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off"};
+    QStringList thrusterValues;
 
 
 signals: //Signal to emit on change
