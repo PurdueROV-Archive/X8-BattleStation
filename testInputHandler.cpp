@@ -9,6 +9,11 @@ void walkFunc(float rotate)
     printf("walk by %f\n", rotate);
 }
 
+void yawFunc(float yaw)
+{
+    printf("why 3rd axis\n", yaw);
+}
+
 void punch()
 {
     printf("Punch!\n");

@@ -1,20 +1,21 @@
 initInputHandler()
 	init SDL library
-	while the program is running
-		check if there's a new joystick
-		if so
-			update queue of joysticks
-			assign button-to-function mapping
-			show it on GUI
-		check if there's a missing joystick
-		if so
-			update queue
-			show it on GUI
-		check if button from any joysticks were pressed
-		if so
-			call function
+	call handleJoysticks()
 
-a vector of SDL_Joystick* will be used to hold joysticks
+handleJoysticks()
+	check if there's a new joystick
+	if there is
+		update queue of joysticks
+		create a new Joystick object (which includes # of buttons and mapping assigned)
+		show it on GUI
+	check if a joystick has been unplugged
+	if so
+		update queue
+		delete Joystick objects
+		show it on GUI
+	check if buttons from any joysticks were pressed
+	if so
+		call mapped function
 
 
 

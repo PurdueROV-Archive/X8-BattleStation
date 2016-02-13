@@ -3,6 +3,7 @@
 
 void rotateFunc(float rotate);
 void walkFunc(float rotate);
+void yawFunc(float yaw);
 void punch();
 void kick(int state);
 void dodge();

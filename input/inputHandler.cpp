@@ -2,6 +2,13 @@
 InputHandler manages gamepad, mouse, and keyboard input.
 It takes in vectors of function pointers and vectors of characters so we can map the functions to buttons (by mapping we mean, if you press a button 'a' it calls the function you assigned the button 'a' to)
 
+To do:
+0. Initialize vectors to maxSize of controllers for each controller (different controllers have different values and stuff)
+1. How do you specify which function goes to which button?
+2. Does typedef transfer in header files? (so we don't need to call typedef for function pointers)
+3. Clean up code (easier to read), make it easier to use, document (e.g. supports Xbox One controllers, Rockcandy..)
+4. Mapping? (how do we see which kind of controller we have?) (https://github.com/kripken/emscripten/issues/2193 for XBox One mapping)
+5. Read .txt file?
 As of 1/23/2016, for gamepad input, we have support for toggling, buttons, and axis. Still needs testing
 As of 1/18/2016, I'm working on adding gamepad input. The code compiles and runs. It might work, but has yet been tested.
 As of 1/16/2016, I'm working on adding gamepad input. It is currently not working yet.
@@ -30,9 +37,11 @@ void func(float input)
 
 the input fed into your function will be the axis values.
 ************************************************************************/
-void InputHandler::addJoystickAxis(std::vector<axisFunc> axisFunctions)
+void InputHandler::addJoystickAxis(int whichJoystick, std::vector<axisFunc> axisFunctions)
 {
-    this->axisFunctions = axisFunctions;
+    if(whichJoystick >= numJoysticks)
+        throw "This joystick does not exist!";
+    this->activeJoysticks[whichJoystick].addJoystickAxis(axisFunctions);
 }
 /***********************************************************************
 Button functions have a function prototype of
@@ -41,9 +50,11 @@ void func(void)
 
 We don't provide any input nor expect any outputs. We simply call the function when button is pressed.
 ************************************************************************/
-void InputHandler::addButtons(std::vector<buttonFunc> buttonFunctions)
+void InputHandler::addButtons(int whichJoystick, std::vector<buttonFunc> buttonFunctions)
 {
-    this->buttonFunctions = buttonFunctions;
+    if(whichJoystick >= numJoysticks)
+        throw "This joystick does not exist!";
+    this->activeJoysticks[whichJoystick].addButtons(buttonFunctions);
 }
 
 /***********************************************************************
@@ -54,15 +65,11 @@ void func(int)
 The input fed into your function is the current state (we keep track of it for you). It is up to your function to check the current state and do what you need to do.
 Do not put infinite while loops in your function please.
 ************************************************************************/
-void InputHandler::addToggleButtons(std::vector<toggleFunc> toggleFunctions, std::vector<int> numStates)
+void InputHandler::addToggleButtons(int whichJoystick, std::vector<toggleFunc> toggleFunctions, std::vector<int> numStates)
 {
-    int toggleFunctionsSize = toggleFunctions.size();//I'll be using this in the for loop. Having a variable is faster than calling .size() multiple times
-    if(toggleFunctionsSize!=numStates.size())//if the toggleFunc and numStates have mismatching numbers, we throw an exception
-        throw "Error in addToggleButtons: togglingFunctions and numStates do not have the same number of elements in them\n";
-    this->toggleFunctions = toggleFunctions;//assigning this class's toggleFunctions to input
-    this->toggleNumStates = numStates;//assigning this class's numStates to input
-    for(int i = 0; i < toggleFunctionsSize; i++)//initializing all current states to 0
-        this->toggleCurrentStates.push_back(0);
+    if(whichJoystick >= numJoysticks)
+        throw "This joystick does not exist";
+    this->activeJoysticks[whichJoystick].addToggleButtons(toggleFunctions, numStates);
 }
 
 InputHandler::InputHandler()
@@ -86,18 +93,14 @@ void InputHandler::handle()
 	{
 		//add all the new joysticks to our vector
 		for(int i = numJoysticks; i < currentNumJoysticks; ++i)//we have numJoysticks, there are currently currentNumJoysticks, so we go from num to currentNum to add all the joysticks that weren't there originally
-			activeJoysticks.push_back(SDL_JoystickOpen(i));
+			activeJoysticks.push_back(Joystick(SDL_JoystickOpen(i)));
 		numJoysticks = currentNumJoysticks;
 	}
 	if(event.type == SDL_JOYDEVICEREMOVED)
 	{
 		//we have to iterate through the vector to see which one is closed and remove it
 		for(int i = 0; i < numJoysticks; ++i)
-		{
-            //if(activeJoysticks[i]->closed > 0)
-                //	activeJoysticks.erase(i);
             printf("don't know how to do remove\n");
-		}
 	}
 //check for events
 	while(SDL_PollEvent(&event))//while there are events in the event queue that still need to be processed
@@ -105,17 +108,15 @@ void InputHandler::handle()
 		switch(event.type)
 		{
             case SDL_JOYBUTTONDOWN:
-                this->buttonFunctions[event.jbutton.button]();
+                qDebug() << "Index requested" << (int)(event.jaxis.axis);
+                this->activeJoysticks[event.jbutton.which].button(event.jbutton.button);
                 break;
             case SDL_JOYAXISMOTION:
-                this->axisFunctions[event.jaxis.axis](event.jaxis.value);
+                qDebug() << "Index requested" << (int)(event.jaxis.axis);
+                this->activeJoysticks[event.jaxis.which].axis(event.jaxis.axis, event.jaxis.value);
                 break;
             case SDL_JOYBUTTONUP:
-                //update state
-                int button = event.jbutton.button;//makes the code cleaner to read (I'll be using it a lot)
-                //updates state: currentState = currentState+1 % numStates
-                this->toggleCurrentStates[button] = (this->toggleCurrentStates[button]+1)%(this->toggleNumStates[button]);
-                this->toggleFunctions[button](this->toggleNumStates[button]);
+                this->activeJoysticks[event.jbutton.which].toggle(event.jbutton.button);
                 break;
 		}
 	}

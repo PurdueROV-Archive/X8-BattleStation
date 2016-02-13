@@ -5,7 +5,8 @@ QT += core qml quick
 SOURCES += main.cpp \
     mainthread.cpp \
     input/inputHandler.cpp \
-    testInputHandler.cpp
+    testInputHandler.cpp \
+    input/joystick.cpp
 
 
 RESOURCES += qml.qrc
@@ -21,7 +22,8 @@ include(deployment.pri)
 HEADERS += \
     mainthread.h \
     input/inputHandler.h \
-    testInputHandler.h
+    testInputHandler.h \
+    input/joystick.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include
