@@ -7,7 +7,6 @@ SOURCES += main.cpp \
     udpsocket.cpp \
     controller.cpp \
     controlpacket.cpp \
-    model.cpp \
     joystick.cpp \
     sdlwrap.cpp \
     thrust_mapping/matrices.cpp \
@@ -29,7 +28,6 @@ HEADERS += \
     udpsocket.h \
     controller.h \
     controlpacket.h \
-    model.h \
     joystick.h \
     sdlwrap.h \
     thrust_mapping/matrices.h \

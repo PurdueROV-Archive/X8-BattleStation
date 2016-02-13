@@ -3,15 +3,21 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QThread>
+#include <QStringList>
+#include "joystick.h"
+#include "mainthread.h"
 
 
 class Controller : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool Running READ Running WRITE SetRunning NOTIFY RunningChanged())
+    Q_PROPERTY(bool Running READ Running WRITE SetRunning NOTIFY RunningChanged)
 
     Q_PROPERTY(QStringList JoystickDevices READ JoystickDevices NOTIFY JoystickDevicesChanged)
+
+    Q_PROPERTY(QStringList ThrusterValues READ ThrusterValues NOTIFY ThrusterValuesChanged)
 
 
 /////////////////////////////////////////
@@ -29,11 +35,14 @@ private:
     static Controller* instance;
     static QMutex mutex;
 
+    void init();
+
 
 /////////////////////////////////////////
-//  Control Thread Running Properties  //
+//   Thread Control Properties & Fns   //
 /////////////////////////////////////////
 
+//Running Property
 public:
     bool Running() const; //Read property
 
@@ -45,14 +54,14 @@ private: //Dependencies
 signals: //Signal to emit on change
     void RunningChanged();
 
-//Model C++ Control Methods
-public:
-    void modelStopRunning(); //set running to false
+//Thread Control Functions
+private:
+    void startThread();
+    void stopThread();
 
-signals:
-    void modelStart(); //signal for start connection
-    void modelStop(); //signal for stop connection
-
+private: //Dependecies
+    QThread* qThread;
+    Mainthread* mainthread;
 
 /////////////////////////////////////////
 //     Joystick Control Properties     //
@@ -74,28 +83,38 @@ signals: //Signal to emit on change
 public slots:
 
     //Select a device based combo index
-    void Joystick1Select(int index);
+    void JoystickSelect(int index);
 
 private: //dependencies
-    int joystick1Index;
+    int joystickIndex;
 
-//Model C++ Control Methods
+    Joystick* joystick;
+
+
+/////////////////////////////////////////
+//     Thruster Control Properties     //
+/////////////////////////////////////////
+
+//QML Property Definitions
 public:
-    //set serial device qlist for combobox
-    void modelSetJoystickDevices(QStringList joystickDevices);
+    //Read property
+    QStringList ThrusterValues() const;
 
-signals:
-    void modelJoystick1Select(int index); //emit when serial device combobox index changed
+    //Write Property
+    void SetThrusterValues(int values[]);
+
+private: //Dependencies
+    QStringList thrusterValues = {"Off", "Off", "Off", "Off", "Off", "Off", "Off", "Off"};
+
+
+signals: //Signal to emit on change
+    void ThrusterValuesChanged();
 
 /////////////////////////////////////////
 //         Misc Public Slots           //
 /////////////////////////////////////////
 public slots:
     void RefreshLists();
-
-signals:
-    void modelRefreshList(); //emit to refresh serial qlist
-
 };
 
 #endif // CONTROLLER_H
