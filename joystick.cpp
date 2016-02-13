@@ -34,6 +34,8 @@ bool Joystick::connect() {
     numAxes = getNumAxes();
     numButtons = getNumButtons();
 
+    qDebug() << numAxes;
+
     for (int i = 0; i < numAxes; i++) {
         axes.append(0);
     }
@@ -105,12 +107,10 @@ bool Joystick::getButtonReleased(int buttonId) {
 
 qint32 Joystick::getAxis(int axisId) {
     if (axisId < 0 || axisId >= numAxes) return 0;
-    qint32 value;
-    if (axes.at(axisId) > 0) {
-        value = (1000 * (axes.at(axisId) + axesZero.at(axisId))) / (INT_16_MAX + axesZero.at(axisId));
-    } else {
-        value = (1000 * (axes.at(axisId) + axesZero.at(axisId))) / (INT_16_MIN - axesZero.at(axisId));
-    }
+    qint32 value =  axes.at(axisId) + axesZero.at(axisId);
+
+    if (value > INT16_MAX) value = INT16_MAX;
+    if (value < INT16_MIN) value = INT16_MIN;
 
     if (abs(value) < 60) value = 0;
 

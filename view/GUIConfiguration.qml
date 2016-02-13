@@ -40,7 +40,7 @@ ROVCard {
             anchors.right: parent.right;
             model: controller.JoystickDevices
             enabled: !controller.Running
-            onCurrentIndexChanged: controller.Joystick1Select(currentIndex-1)
+            onCurrentIndexChanged: controller.JoystickSelect(currentIndex-1)
         }
 
         Row {
@@ -61,7 +61,7 @@ ROVCard {
             }
 
             ROVButton {
-                id: serialControl
+                id: threadControl
                 height: 30
                 width: 150
 

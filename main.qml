@@ -85,13 +85,7 @@ Window {
 
             ROVView.GUITimer{}
 
-            ROVView.ROVCard {
-                title: "Mission Tasks"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: parent.height - 110
-                headerColor: mainColor
-            }
+            ROVView.GUIMissionTasks{}
 
         }
 
@@ -115,13 +109,7 @@ Window {
                 headerColor: mainColor
             }
 
-            ROVView.ROVCard {
-                title: "Control Configuration"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: parent.height/2
-                headerColor: mainColor
-            }
+            ROVView.GUIThrusters{}
 
         }
 

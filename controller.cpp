@@ -1,9 +1,5 @@
 #include "controller.h"
-
-//Controller::Controller() : QObject() {
-//    //Make sure it isn't running to begin with
-//    running = false;
-//}
+#include <QDebug>
 
 Controller* Controller::instance = NULL;
 QMutex Controller::mutex;
@@ -13,20 +9,35 @@ Controller* Controller::getInstance() {
 
     if (instance == NULL) {
         instance = new Controller();
-		instance->running = false;
+        instance->init();
     }
-
 
     return instance;
 }
 
 Controller::~Controller() {
+    //NEVER DECONSTUCT...
+}
 
+void Controller::init() {
+    this->running = false;
+
+    if (SdlWrap::init() == false) {
+        qDebug() << SdlWrap::getError();
+    }
+
+    joystickDevices = SdlWrap::getJoystickList();
+    thrusterValues = QStringList();
+
+    joystick = new Joystick();
+
+    qThread = new QThread(this);
+    mainthread = new Mainthread(joystick);
 }
 
 
 /////////////////////////////////////////
-//  Control Thread Running Properties  //
+//   Thread Control Properties & Fns   //
 /////////////////////////////////////////
 
 //Read property
@@ -39,20 +50,33 @@ void Controller::SetRunning(bool running) {
     this->running = running;
 
     if (this->running) {
-        emit modelStart();
+        this->startThread();
     } else {
-        emit modelStop();
+        this->stopThread();
     }
 
     emit RunningChanged();
 }
 
-//set running to false, from model
-void Controller::modelStopRunning() {
-    running = false;
+//Start Thread Fn
+void Controller::startThread() {
+    running = true;
+    if (mainthread->start()) {
+        running = true;
+    } else {
+        running = false;
+    }
+
     emit RunningChanged();
 }
 
+//Stop Thread Function
+void Controller::stopThread() {
+    running = false;
+    mainthread->stop();
+
+    emit RunningChanged();
+}
 
 
 /////////////////////////////////////////
@@ -64,21 +88,30 @@ QStringList Controller::JoystickDevices() const {
     return joystickDevices;
 }
 
-//Additional Control Methods
-
 //Select a device
-void Controller::Joystick1Select(int index) {
-    joystick1Index = index;
-    emit modelJoystick1Select(joystick1Index);
+void Controller::JoystickSelect(int index) {
+    joystickIndex = index;
+    joystick->select(index);
 }
 
-//Model C++ Control Methods
 
-//set serial device qlist for combobox
-void Controller::modelSetJoystickDevices(QStringList joystickDevices) {
-    //qDebug() << "Setting new joystick";
-    this->joystickDevices = joystickDevices;
-    emit JoystickDevicesChanged();
+/////////////////////////////////////////
+//     Thruster Control Properties     //
+/////////////////////////////////////////
+
+QStringList Controller::ThrusterValues() const {
+    return thrusterValues;
+}
+
+void Controller::SetThrusterValues(int values[]) {
+    thrusterValues.clear();
+
+    for (int i = 0; i < 8; i++) {
+       QString val = QString("%1").arg(values[i]/32);
+       thrusterValues.append(val + "");
+    }
+
+    emit ThrusterValuesChanged();
 }
 
 /////////////////////////////////////////
@@ -87,7 +120,8 @@ void Controller::modelSetJoystickDevices(QStringList joystickDevices) {
 
 //Refresh Serial Devices
 void Controller::RefreshLists() {
-    emit modelRefreshList();
+    joystickDevices = SdlWrap::getJoystickList();
+    emit JoystickDevicesChanged();
 }
 
 

@@ -3,7 +3,6 @@
 #include <QQmlContext>
 #include "mainthread.h"
 #include "controller.h"
-#include "model.h"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
@@ -15,9 +14,6 @@ int main(int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("controller", control);
 
     qRegisterMetaType<Sint16>("Sint16");
-
-    Model* model = new Model();
-    model->init();
 
     return app.exec();
 }
