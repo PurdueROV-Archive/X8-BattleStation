@@ -1,4 +1,5 @@
 #include "mainthread.h"
+#include "controller.h"
 
 Mainthread::Mainthread(Joystick *joystick1) : QObject() {
 
@@ -11,6 +12,8 @@ Mainthread::Mainthread(Joystick *joystick1) : QObject() {
     lastTime = 0;
 
     this->joystick1 = joystick1;
+
+    //controller = Controller::getInstance();
 
     //Connect thredTimer timeout to tick slot
     connect(threadTimer, SIGNAL(timeout()), SLOT(tick()), Qt::DirectConnection);
@@ -33,6 +36,8 @@ bool Mainthread::start() {
     udp = new UDPSocket();
     udp->initSocket("192.168.1.100", 5100);
 
+    joystick1->connect();
+
     thrustMapper = new ThrustMapper();
 
     return true;
@@ -44,7 +49,7 @@ void Mainthread::stop() {
     threadTimer->stop();
     udp->closeSocket();
 
-    //closing stuff here
+    joystick1->disconnect();
 }
 
 
@@ -54,12 +59,35 @@ void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     //qDebug() << now-lastTime;
 
-//    qDebug() << joystick1->getAxis(0);
-//    qDebug() << joystick1->getAxis(1);
-//    qDebug() << joystick1->getAxis(2);
-//    qDebug() << joystick1->getAxis(3);
-//    qDebug() << joystick1->getAxis(4);
-//    qDebug() << joystick1->getAxis(5);
+    joystick1->update();
+
+    vect6 targetvector;
+
+    targetvector.L.x = joystick1->getAxis(JOYSTICK_LJ_Y) * -1;
+    targetvector.L.z = (joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2);
+
+    int l = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
+    int r = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
+    targetvector.L.y = (l + r) * INT16_MAX;
+
+    targetvector.R.x = joystick1->getAxis(JOYSTICK_RJ_X);
+    targetvector.R.y = joystick1->getAxis(JOYSTICK_RJ_Y) * -1;
+    targetvector.R.z = joystick1->getAxis(JOYSTICK_LJ_X);
+
+    qDebug("L: x: %d, y: %d, z: %d\n", targetvector.L.x, targetvector.L.y, targetvector.L.z);
+    qDebug("R: x: %d, y: %d, z: %d\n", targetvector.R.x, targetvector.R.y, targetvector.R.z);
+
+    ThrustMapper* tm = new ThrustMapper();
+    tm->calculateThrustMap(targetvector);
+
+    vect8 m = tm->thrust_map;
+    qDebug("%d         %d\n", m.a, m.b);
+    qDebug("   %d  %d  \n",   m.c, m.d);
+    qDebug("   %d  %d  \n",   m.e, m.f);
+    qDebug("%d         %d\n", m.g, m.h);
+
+    int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
+    Controller::getInstance()->SetThrusterValues(thrusters);
 
     ControlPacket* cp = new ControlPacket();
     //cp->print();
@@ -75,6 +103,4 @@ void Mainthread::tick() {
 
 
     lastTime = now;
-
-    //TODO: Add code for each tick
 }
