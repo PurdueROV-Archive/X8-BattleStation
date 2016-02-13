@@ -29,22 +29,22 @@ ROVCard {
             spacing: 100
             ROVThruster {
                 orientation: "horizontal";
-                rotation: 23;
+                rotation: 20;
                 value: (controller.Running) ? controller.ThrusterValues[0] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
-                rotation: -23;
+                rotation: -20;
                 value: (controller.Running) ? controller.ThrusterValues[1] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
-                rotation: 157;
+                rotation: 160;
                 value: (controller.Running) ? controller.ThrusterValues[2] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
-                rotation: 203;
+                rotation: 200;
                 value: (controller.Running) ? controller.ThrusterValues[3] : "Off"
             }
 
