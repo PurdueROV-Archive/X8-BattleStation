@@ -30,48 +30,6 @@ myInput.handle();//start the loop
 **************************************************************************/
 #include "inputHandler.h"
 
-/***********************************************************************
-Axis functions have a function prototype of
-
-void func(float input)
-
-the input fed into your function will be the axis values.
-************************************************************************/
-void InputHandler::addJoystickAxis(int whichJoystick, std::vector<axisFunc> axisFunctions)
-{
-    if(whichJoystick >= numJoysticks)
-        throw "This joystick does not exist!";
-    this->activeJoysticks[whichJoystick].addJoystickAxis(axisFunctions);
-}
-/***********************************************************************
-Button functions have a function prototype of
-
-void func(void)
-
-We don't provide any input nor expect any outputs. We simply call the function when button is pressed.
-************************************************************************/
-void InputHandler::addButtons(int whichJoystick, std::vector<buttonFunc> buttonFunctions)
-{
-    if(whichJoystick >= numJoysticks)
-        throw "This joystick does not exist!";
-    this->activeJoysticks[whichJoystick].addButtons(buttonFunctions);
-}
-
-/***********************************************************************
-Toggle (as in "turn on/off" buttons) functions have a function prototype of
-
-void func(int)
-
-The input fed into your function is the current state (we keep track of it for you). It is up to your function to check the current state and do what you need to do.
-Do not put infinite while loops in your function please.
-************************************************************************/
-void InputHandler::addToggleButtons(int whichJoystick, std::vector<toggleFunc> toggleFunctions, std::vector<int> numStates)
-{
-    if(whichJoystick >= numJoysticks)
-        throw "This joystick does not exist";
-    this->activeJoysticks[whichJoystick].addToggleButtons(toggleFunctions, numStates);
-}
-
 InputHandler::InputHandler()
 {
 	//initialize the SDL library's joystick functions
@@ -80,6 +38,11 @@ InputHandler::InputHandler()
 	SDL_JoystickEventState(SDL_ENABLE);//initialize SDL's event queue
 	numJoysticks = 0;
 	currentNumJoysticks = 0;
+}
+
+void InputHandler::put(KeyMapping map)
+{
+    keyMapping[map.getJoystickType()] = map;
 }
 
 /***********************************************************************
@@ -93,7 +56,12 @@ void InputHandler::handle()
 	{
 		//add all the new joysticks to our vector
 		for(int i = numJoysticks; i < currentNumJoysticks; ++i)//we have numJoysticks, there are currently currentNumJoysticks, so we go from num to currentNum to add all the joysticks that weren't there originally
-			activeJoysticks.push_back(Joystick(SDL_JoystickOpen(i)));
+        {
+            SDL_Joystick* joy = Joystick(SDL_JoystickOpen(i));
+            const char* name = (const char*) SDL_JoystickName(i);
+            QString Qname(name);
+            activeJoysticks.push_back(joy, keyMapping[Qname]);
+        }
 		numJoysticks = currentNumJoysticks;
 	}
 	if(event.type == SDL_JOYDEVICEREMOVED)

@@ -1,5 +1,5 @@
 #Using the Input Handler
-This should take <5 minutes (assuming you know how to program and you are familiar with C++ syntax)
+This should take less than 5 minutes (assuming you know how to program and are familiar with C++ syntax)
 
 #include InputHandler.h
 #include KeyMapping.h
@@ -23,12 +23,12 @@ KeyMapping* map1 = new KeyMapping("XBox One");//in this example, we have XBox On
 
 //the function to map things is
 //map("button name", func)
-//for toggle it's map("button name", func, numberOfStates)
+//for toggle, because there are states, it's map("button name", func, numberOfStates)
 
-map1.map("x", myFunc1);
-map1.map("y", myFunc2);
-map1.map("z", myFunc3, 3);
-map1.map("leftAxis", myFunc4);
+map1.map(XBoxOne.x, myFunc1);
+map1.map(XBoxOne.y, myFunc2);
+map1.map(XBoxOne.a, myFunc3, 3);
+map1.map(XBoxOne.leftAxis, myFunc4);
 ...
 
 //after you finish mapping, add the mapping to the InputHandler
