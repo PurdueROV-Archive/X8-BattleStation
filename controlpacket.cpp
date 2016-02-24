@@ -8,6 +8,30 @@ ControlPacket::ControlPacket() {
 ControlPacket::~ControlPacket() {
 }
 
+void ControlPacket::setX(qint16 x) {
+    memcpy(this->x, &x, 2);
+}
+
+void ControlPacket::setY(qint16 y) {
+    memcpy(this->y, &y, 2);
+}
+
+void ControlPacket::setZ(qint16 z) {
+    memcpy(this->z, &z, 2);
+}
+
+void ControlPacket::setRoll(qint16 roll) {
+    memcpy(this->roll, &roll, 2);
+}
+
+void ControlPacket::setPitch(qint16 pitch) {
+    memcpy(this->pitch, &pitch, 2);
+}
+
+void ControlPacket::setYaw(qint16 yaw) {
+    memcpy(this->yaw, &yaw, 2);
+}
+
 
 quint8 ControlPacket::crc(QByteArray data) {
     quint8 crc = 0;
@@ -29,10 +53,28 @@ quint8 ControlPacket::crc(QByteArray data) {
 }
 
 void ControlPacket::assemblePacket() {
-    data[0] = HEADER;
-    data[1] = CONTROL;
+     data[0] =   HEADER;
+     data[1] =  CONTROL;
 
-    for (int i = 2; i < PACKET_SIZE-2; i++) {
+     data[2] =     x[0];
+     data[3] =     x[1];
+
+     data[4] =     y[0];
+     data[5] =     y[1];
+
+     data[6] =     z[0];
+     data[7] =     z[1];
+
+     data[8] =  roll[0];
+     data[9] =  roll[1];
+
+    data[10] = pitch[0];
+    data[11] = pitch[1];
+
+    data[12] =   yaw[0];
+    data[13] =   yaw[1];
+
+    for (int i = 14; i < PACKET_SIZE-2; i++) {
         data[i] = 'A' + i - 2;
     }
 
@@ -60,7 +102,7 @@ void ControlPacket::print() {
     int size = data.size();
     qDebug("Size: %d", size);
     for (int i = 0; i < size; ++i) {
-        qDebug("[%d]: %c", i, (quint8) data.at(i));
+        qDebug("[%d]: %c, %d\n", i, (quint8) data.at(i), (quint8) data.at(i));
     }
 }
 

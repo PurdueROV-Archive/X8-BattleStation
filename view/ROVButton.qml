@@ -6,15 +6,17 @@ Item {
 
     property int fontSize: 30
     property string color: mainColor
-    property string text: ""
+    property string  text: ""
 
     signal clicked
 
     id: rovButton
 
+    property int buttonRadius: 2
+
     Rectangle {
         id: background
-        radius: 4
+        radius: buttonRadius
         anchors.fill: parent
         clip: true
 
@@ -23,7 +25,7 @@ Item {
         Rectangle {
             anchors.fill: parent
             color: "white"
-            radius: 4
+            radius: buttonRadius
             opacity: (ma.containsMouse) ? 0.3 : 0.0
             Behavior on opacity {NumberAnimation {duration: 300}}
         }
@@ -70,7 +72,7 @@ Item {
         anchors.horizontalCenter: rovButton.horizontalCenter
         anchors.top: rovButton.top
         anchors.topMargin: (ma.pressed) ? 6 : 3
-        radius: 4
+        radius: buttonRadius
         color: "#30000000"
 
         opacity: (ma.containsMouse) ? 1 : 0.0

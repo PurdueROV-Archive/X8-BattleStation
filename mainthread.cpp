@@ -63,39 +63,55 @@ void Mainthread::tick() {
 
     vect6 targetvector;
 
-    targetvector.L.x = joystick1->getAxis(JOYSTICK_LJ_Y) * -1;
-    targetvector.L.z = (joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2);
+    targetvector.L.z = joystick1->getAxis(JOYSTICK_LJ_Y) * -1;
+    targetvector.L.y = (joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2);
 
     int l = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
     int r = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
-    targetvector.L.y = (l + r) * INT16_MAX;
+    targetvector.L.x = (l + r) * INT16_MAX;
 
-    targetvector.R.x = joystick1->getAxis(JOYSTICK_RJ_X);
-    targetvector.R.y = joystick1->getAxis(JOYSTICK_RJ_Y) * -1;
-    targetvector.R.z = joystick1->getAxis(JOYSTICK_LJ_X);
+    targetvector.R.z = joystick1->getAxis(JOYSTICK_RJ_X);
+    targetvector.R.x = joystick1->getAxis(JOYSTICK_RJ_Y) * -1;
+    targetvector.R.y = joystick1->getAxis(JOYSTICK_LJ_X) * -1;
 
-    qDebug("L: x: %d, y: %d, z: %d\n", targetvector.L.x, targetvector.L.y, targetvector.L.z);
-    qDebug("R: x: %d, y: %d, z: %d\n", targetvector.R.x, targetvector.R.y, targetvector.R.z);
+    //qDebug("L: x: %d, y: %d, z: %d\n", targetvector.L.x, targetvector.L.y, targetvector.L.z);
+    //qDebug("R: x: %d, y: %d, z: %d\n", targetvector.R.x, targetvector.R.y, targetvector.R.z);
 
     ThrustMapper* tm = new ThrustMapper();
     tm->calculateThrustMap(targetvector);
 
     vect8 m = tm->thrust_map;
-    qDebug("%d         %d\n", m.a, m.b);
-    qDebug("   %d  %d  \n",   m.c, m.d);
-    qDebug("   %d  %d  \n",   m.e, m.f);
-    qDebug("%d         %d\n", m.g, m.h);
+    //qDebug("%d         %d\n", m.a, m.b);
+    //qDebug("   %d  %d  \n",   m.e, m.f);
+    //qDebug("   %d  %d  \n",   m.g, m.h);
+    //qDebug("%d         %d\n", m.c, m.d);
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
 
     ControlPacket* cp = new ControlPacket();
-    //cp->print();
+
+    cp->setX(joystick1->getAxis(JOYSTICK_LJ_X));
+
+    int ll = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
+    int rr = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
+    cp->setY((ll+rr) * INT16_MAX);
+
+    cp->setZ((joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2));
+
+    cp->setRoll(joystick1->getAxis(JOYSTICK_LJ_X));
+    cp->setPitch(joystick1->getAxis(JOYSTICK_RJ_Y));
+    cp->setYaw(joystick1->getAxis(JOYSTICK_RJ_X));
+
+
+
+    cp->print();
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
 
     if (returnData.size() > 0) {
+        qDebug() << "Things";
         for (int i = 0; i < 30; ++i) {
             qDebug("[%d]: %c", i, (quint8) returnData.at(i));
         }

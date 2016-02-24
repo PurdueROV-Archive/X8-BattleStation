@@ -112,7 +112,7 @@ qint32 Joystick::getAxis(int axisId) {
     if (value > INT16_MAX) value = INT16_MAX;
     if (value < INT16_MIN) value = INT16_MIN;
 
-    if (abs(value) < 60) value = 0;
+    if (abs(value) < 400) value = 0;
 
     return value;
 }

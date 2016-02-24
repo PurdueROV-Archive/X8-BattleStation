@@ -23,6 +23,7 @@ ROVCard {
 
         spacing: 10
 
+
         Label {
             text: "Joystick 1:"
             anchors.left: parent.left;
