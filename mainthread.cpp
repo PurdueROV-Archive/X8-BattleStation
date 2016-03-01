@@ -68,7 +68,7 @@ void Mainthread::tick() {
 
     int l = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
     int r = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
-    targetvector.L.x = (l + r) * INT16_MAX;
+    targetvector.L.x = (l + r) * INT_16_MAX;
 
     targetvector.R.z = joystick1->getAxis(JOYSTICK_RJ_X);
     targetvector.R.x = joystick1->getAxis(JOYSTICK_RJ_Y) * -1;
@@ -95,7 +95,7 @@ void Mainthread::tick() {
 
     int ll = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
     int rr = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
-    cp->setY((ll+rr) * INT16_MAX);
+    cp->setY((ll+rr) * INT_16_MAX);
 
     cp->setZ((joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2));
 

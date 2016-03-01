@@ -16,6 +16,8 @@ class Controller : public QObject
     Q_PROPERTY(bool Running READ Running WRITE SetRunning NOTIFY RunningChanged)
 
     Q_PROPERTY(QStringList JoystickDevices READ JoystickDevices NOTIFY JoystickDevicesChanged)
+    Q_PROPERTY(int JoystickCount READ JoystickCount NOTIFY JoystickCountChanged)
+    Q_PROPERTY(QString JoystickName READ JoystickName NOTIFY JoystickNameChanged)
 
     Q_PROPERTY(QStringList ThrusterValues READ ThrusterValues NOTIFY ThrusterValuesChanged)
 
@@ -70,6 +72,8 @@ private: //Dependecies
 //QML Property Definitions
 public:
     QStringList JoystickDevices() const; //Read property
+    int JoystickCount() const;
+    QString JoystickName() const;
 
     //Write Property
 
@@ -78,6 +82,8 @@ private: //Dependencies
 
 signals: //Signal to emit on change
     void JoystickDevicesChanged();
+    void JoystickCountChanged();
+    void JoystickNameChanged();
 
 //Additional Control Methods
 public slots:

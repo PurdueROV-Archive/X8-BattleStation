@@ -109,8 +109,8 @@ qint32 Joystick::getAxis(int axisId) {
     if (axisId < 0 || axisId >= numAxes) return 0;
     qint32 value =  axes.at(axisId) + axesZero.at(axisId);
 
-    if (value > INT16_MAX) value = INT16_MAX;
-    if (value < INT16_MIN) value = INT16_MIN;
+    if (value > INT_16_MAX) value = INT_16_MAX;
+    if (value < INT_16_MIN) value = INT_16_MIN;
 
     if (abs(value) < 400) value = 0;
 

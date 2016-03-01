@@ -7,6 +7,7 @@ Item {
     property int fontSize: 30
     property string color: mainColor
     property string  text: ""
+    property bool    bold: false
 
     signal clicked
 
@@ -90,6 +91,7 @@ Item {
         anchors.verticalCenter: rovButton.verticalCenter
         width: rovButton.width
         font.weight: Font.Thin
+        font.bold: bold
     }
 
 

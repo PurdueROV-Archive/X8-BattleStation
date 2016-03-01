@@ -9,7 +9,7 @@
 #undef main
 
 #define INT_16_MAX 32767
-#define INT_16_MIN 32768
+#define INT_16_MIN -32768
 
 
 #define JOYSTICK_A 10
