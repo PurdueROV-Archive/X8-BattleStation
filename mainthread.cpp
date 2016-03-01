@@ -31,28 +31,17 @@ bool Mainthread::start() {
     //TODO: Check if joysticks are connected, can connet to microcontroller, etc
     threadTimer->start();
     //initialize stuff here
-    qDebug("before initializing myInput\n");
     myInput = new InputHandler();
-    qDebug("before typedefs\n");
-    typedef void(*axisFunc)(float);
-    typedef void(*buttonFunc)(void);    
-    typedef void(*toggleFunc)(int);
-    qDebug("before vectors\n");
-    std::vector<axisFunc> axis = {rotateFunc, walkFunc, yawFunc, yawFunc, yawFunc, yawFunc, yawFunc, yawFunc};
-    std::vector<buttonFunc> button = {punch, dodge, climbUp, climbDown, climbLeft, climbRight};
-    std::vector<toggleFunc> toggle = {kick, slide};
-    std::vector<int> numStates = {4, 2};
-    qDebug("before adds\n");
-    try
-    {
-        myInput->addJoystickAxis(0, axis);
-        myInput->addButtons(0, button);
-        myInput->addToggleButtons(0, toggle, numStates);
-    }
-    catch(const char* e)
-    {
-        qDebug() << e;
-    }
+    //std::vector<axisFunc> axis = {rotateFunc, walkFunc, yawFunc, yawFunc, yawFunc, yawFunc, yawFunc, yawFunc};
+    //std::vector<buttonFunc> button = {punch, dodge, climbUp, climbDown, climbLeft, climbRight};
+    //std::vector<toggleFunc> toggle = {kick, slide};
+    //std::vector<int> numStates = {4, 2};
+    KeyMapping map1 = KeyMapping("XBoxOne");
+    map1.map(XBoxOne::X, punch);
+    map1.map(XBoxOne::Y, dodge);
+    map1.map(XBoxOne::A, climbUp);
+    myInput->put(map1);
+    myInput->handle();
     return true;
 }
 

@@ -6,7 +6,8 @@ SOURCES += main.cpp \
     mainthread.cpp \
     input/inputHandler.cpp \
     testInputHandler.cpp \
-    input/joystick.cpp
+    input/joystick.cpp \
+    input/KeyMapping.cpp
 
 
 RESOURCES += qml.qrc
@@ -23,7 +24,8 @@ HEADERS += \
     mainthread.h \
     input/inputHandler.h \
     testInputHandler.h \
-    input/joystick.h
+    input/joystick.h \
+    input/KeyMapping.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include

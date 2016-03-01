@@ -42,7 +42,15 @@ InputHandler::InputHandler()
 
 void InputHandler::put(KeyMapping map)
 {
-    keyMapping[map.getJoystickType()] = map;
+    if(keyMappings.find(map.getJoystickType()) == keyMappings.end())
+    {
+        keyMappings.insert(make_pair(map.getJoystickType(),map));
+    }
+    else
+    {
+        keyMappings.erase(map.getJoystickType());
+        keyMappings.insert(make_pair(map.getJoystickType(),map));
+    }
 }
 
 /***********************************************************************
@@ -57,10 +65,13 @@ void InputHandler::handle()
 		//add all the new joysticks to our vector
 		for(int i = numJoysticks; i < currentNumJoysticks; ++i)//we have numJoysticks, there are currently currentNumJoysticks, so we go from num to currentNum to add all the joysticks that weren't there originally
         {
-            SDL_Joystick* joy = Joystick(SDL_JoystickOpen(i));
-            const char* name = (const char*) SDL_JoystickName(i);
+            SDL_Joystick* joystick = SDL_JoystickOpen(i);
+            //check what type it is
+            const char* name = SDL_JoystickName(joystick);
             QString Qname(name);
-            activeJoysticks.push_back(joy, keyMapping[Qname]);
+            //create Joystick object based on the name
+            Joystick joy = Joystick(joystick, &(keyMappings.at(Qname)));
+            activeJoysticks.push_back(joy);
         }
 		numJoysticks = currentNumJoysticks;
 	}

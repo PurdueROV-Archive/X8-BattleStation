@@ -4,34 +4,31 @@ void KeyMapping::map(int button, axisFunc func)
 {
 	if(button > axisFunctions.size())
 	{
-		QDebug() << "Invalid axis assigned. There are only " << axisFunctions.size() << "axes, but you tried assigning " << button<< endl;
+        qDebug() << "Invalid axis assigned. There are only " << axisFunctions.size() << "axes, but you tried assigning " << button<< endl;
 		return;
 	}
-	axisFunctions.insert(button, func);
+    axisFunctions[button] = func;
 }
 
 void KeyMapping::map(int button, buttonFunc func)
 {
 	if(button > buttonFunctions.size())
 	{
-		QDebug() << "Invalid button assigned. There are only " << buttonFunctions.size() << "buttons, but you tried assigning " << button<< endl;
+        qDebug() << "Invalid button assigned. There are only " << buttonFunctions.size() << "buttons, but you tried assigning " << button<< endl;
 		return;
 	}
-	buttonFunctions.insert(button, func);
+    buttonFunctions[button] = func;
 }
 
 void KeyMapping::map(int button, toggleFunc func, int numStates)
 {
 	if(button > buttonFunctions.size())
 	{
-		QDebug() << "Invalid button assigned. There are only " << buttonFunctions.size() << "buttons, but you tried assigning " << button<< endl;
+        qDebug() << "Invalid button assigned. There are only " << buttonFunctions.size() << "buttons, but you tried assigning " << button<< endl;
 		return;
 	}	
-	//using namespace std;
-	//toggleFunctions::iterator it;
-	//it = button;
-	toggleFunctions.insert(button, func);
-	toggleNumStates.insert(button, numStates);
+    toggleFunctions[button] = func;
+    toggleNumStates[button] = numStates;
 }
 
 void KeyMapping::axis(int index, float val)
@@ -61,12 +58,12 @@ KeyMapping::KeyMapping(QString joystickType)
 {
 	//check	which joystick it is and based on that, define the size of vectors
 	this->joystickType = joystickType;
-	if(joystickType == "XBoxOne")
+    if(joystickType == XBoxOneID)
 	{
-		axisFunctions.resize(XBoxOne.NUMAXES);
-		buttonFunctions.resize(XBoxOne.NUMBUTTONS);
-		toggleFunctions.resize(XBoxOne.NUMBUTTONS);
-		toggleNumStates.resize(XBoxOne.NUMBUTTONS);
-		toggleCurrentStates.resize(XBoxOne.NUMBUTTONS, 0);
+        axisFunctions.resize(XBoxOne::NUMAXES);
+        buttonFunctions.resize(XBoxOne::NUMBUTTONS);
+        toggleFunctions.resize(XBoxOne::NUMBUTTONS);
+        toggleNumStates.resize(XBoxOne::NUMBUTTONS);
+        toggleCurrentStates.resize(XBoxOne::NUMBUTTONS, 0);
 	}
 }

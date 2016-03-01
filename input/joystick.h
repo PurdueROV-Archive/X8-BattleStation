@@ -6,7 +6,7 @@
 class Joystick
 {
 public:
-    explicit Joystick(SDL_Joystick* joystick);
+    explicit Joystick(SDL_Joystick* joystick, KeyMapping* map);
     void axis(int index, float val);
     void button(int index);
     void toggle(int index);

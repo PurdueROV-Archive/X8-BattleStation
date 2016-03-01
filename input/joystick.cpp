@@ -14,7 +14,7 @@ void Joystick::toggle(int index)
 {
     this->keyMapping->toggle(index);
 }
-Joystick::Joystick(SDL_Joystick* joystick, keyMapping keyMapping)
+Joystick::Joystick(SDL_Joystick* joystick, KeyMapping *keyMapping)
 {
     this->joystick = joystick;
     this->keyMapping = keyMapping;
