@@ -26,8 +26,5 @@ Rectangle {
         id: body
         anchors.fill: parent
         anchors.margins: 10
-
-
     }
-
 }
