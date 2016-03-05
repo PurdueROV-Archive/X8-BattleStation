@@ -18,7 +18,7 @@ Rectangle {
     anchors.bottom: parent.bottom
 
 
-    Behavior on x {NumberAnimation {duration: 1}}
+    Behavior on x {NumberAnimation {duration: 100}}
 
     MouseArea {
         anchors.fill: parent
