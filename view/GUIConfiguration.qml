@@ -33,23 +33,28 @@ ROVCard {
             font.pixelSize: 18
             color: "white"
         }
+        Label {
+            text: "Connection " + controller.ConnectionIP + ":" + controller.ConnectionPort
+            anchors.left: parent.left;
+            anchors.right: parent.right
 
-        ROVButton {
-            id: threadControl
-            height: 30
-            width: 150
-
-            text: (!controller.Running) ? "Connect" : "Stop"
-            enabled: controller.JoystickCount > 0
-            fontSize: 20
-            onClicked: {
-                controller.Running = !controller.Running
-//                if (controller.JoystickCount > 0) {
-//                    controller.JoystickSelect(joystick1Combo.currentIndex)
-
-//                }
-            }
+            font.bold: true
+            font.pixelSize: 18
+            color: "white"
         }
+    }
 
+    ROVButton {
+        id: threadControl
+        height: 30
+        width: 150
+        anchors.centerIn: parent
+
+        text: (!controller.Running) ? "Connect" : "Stop"
+        enabled: controller.JoystickCount > 0
+        fontSize: 20
+        onClicked: {
+            controller.Running = !controller.Running
+        }
     }
 }

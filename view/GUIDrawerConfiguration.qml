@@ -73,14 +73,54 @@ Item {
             color: "white"
         }
 
-        TextField {
-            height: 30
-            horizontalAlignment: TextInput.AlignHCenter
+        Item {
             width: parent.width
-            text: "192.168.1.1"
-            enabled: !controller.Running
-            font.pixelSize: 20
+            height: 30
+
+            TextField {
+                id: connectionIP
+                height: 30
+                anchors.left: parent.left
+                anchors.right: connectionPort.left
+                anchors.rightMargin: 10
+                horizontalAlignment: Text.AlignRight
+                width: parent.width
+                text: "192.168.1.100"
+                enabled: !controller.Running
+                font.pixelSize: 20
+                Binding {
+                    target: controller
+                    property: "ConnectionIP"
+                    value: connectionIP.text
+                }
+            }
+
+
+            TextField {
+                id: connectionPort
+                height: 30
+                width: 100
+                anchors.right: parent.right
+                text: "5100"
+                enabled: !controller.Running
+                font.pixelSize: 20
+                validator: IntValidator {bottom: 1; top: 65536;}
+                onTextChanged: {
+                    if (text.length < 1) {
+                        controller.ConnectionPort = 0
+                    }
+                }
+
+                Binding {
+                    target: controller
+                    property: "ConnectionPort"
+                    value: connectionPort.text
+                }
+            }
+
         }
+
+
 
         Label {
             text: "\nTuning Constants:"
@@ -143,9 +183,57 @@ Item {
             enabled: !controller.Running
             font.pixelSize: 20
         }
+
+        Label {
+            text: "\nPivots X, Y, Z:"
+            anchors.left: parent.left;
+            anchors.right: parent.right
+
+            font.bold: true
+            font.pixelSize: 18
+            color: "white"
+        }
+
+        Item {
+            anchors.right: parent.right
+            anchors.left: parent.left
+            height: 30
+
+            TextField {
+                id: xPivot
+                height: 30
+                horizontalAlignment: TextInput.AlignHCenter
+                anchors.right: yPivot.left
+                anchors.left: parent.left
+                anchors.rightMargin: 10
+                text: "0"
+                validator: IntValidator {bottom: -128; top: 127;}
+                enabled: !controller.Running
+                font.pixelSize: 20
+            }
+            TextField {
+                id: yPivot
+                height: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: (parent.width / 3) - 20
+                horizontalAlignment: TextInput.AlignHCenter
+                text: "0"
+                validator: IntValidator {bottom: -128; top: 127;}
+                enabled: !controller.Running
+                font.pixelSize: 20
+            }
+            TextField {
+                id: zPivot
+                height: 30
+                horizontalAlignment: TextInput.AlignHCenter
+                anchors.right: parent.right
+                anchors.left: yPivot.right
+                anchors.leftMargin: 10
+                text: "0"
+                validator: IntValidator {bottom: -128; top: 127;}
+                enabled: !controller.Running
+                font.pixelSize: 20
+            }
+        }
     }
-
-
-
-
 }

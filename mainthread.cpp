@@ -32,7 +32,8 @@ bool Mainthread::start() {
     //initialize stuff here
 
     udp = new UDPSocket();
-    udp->initSocket("192.168.1.100", 5100);
+    udp->initSocket(Controller::getInstance()->ConnectionIP(),
+                    Controller::getInstance()->ConnectionPort());
 
     joystick->connect();
 
@@ -85,6 +86,8 @@ void Mainthread::tick() {
     Controller::getInstance()->SetThrusterValues(thrusters);
     */
 
+    qDebug() << Controller::getInstance()->ConnectionIP();
+
     ControlPacket* cp = new ControlPacket();
 
     cp->setX(joystick->getAxis(JOYSTICK_LJ_Y));
@@ -99,7 +102,7 @@ void Mainthread::tick() {
     cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
     cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
 
-    cp->print();
+    //cp->print();
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();

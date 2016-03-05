@@ -88,7 +88,7 @@ Window {
         Column {
             id: leftColumn
 
-            width: mainGrid.width/3 - 10
+            width: mainGrid.width*0.3 - 10
             height: mainGrid.height
             spacing: 20
 
@@ -106,7 +106,7 @@ Window {
         Column {
             id: centerColumn
 
-            width: mainGrid.width/3 - 10
+            width: mainGrid.width*0.4 - 10
             height: mainGrid.height
             spacing: 20
 
@@ -122,7 +122,9 @@ Window {
                 headerColor: mainColor
             }
 
-            ROVView.GUIThrusters{}
+            ROVView.GUIConfiguration{}
+
+
 
         }
 
@@ -130,7 +132,7 @@ Window {
         Column {
             id: rightColumn
 
-            width: mainGrid.width/3 - 10
+            width: mainGrid.width*0.3 - 10
             height: mainGrid.height
             spacing: 20
 
@@ -146,7 +148,7 @@ Window {
                 headerColor: mainColor
             }
 
-            ROVView.GUIConfiguration{}
+            ROVView.GUIThrusters{}
         }
     }
 }

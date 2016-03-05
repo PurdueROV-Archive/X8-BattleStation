@@ -21,6 +21,9 @@ class Controller : public QObject
 
     Q_PROPERTY(QStringList ThrusterValues READ ThrusterValues NOTIFY ThrusterValuesChanged)
 
+    Q_PROPERTY(QString ConnectionIP READ ConnectionIP WRITE setConnectionIP NOTIFY ConnectionIPChanged)
+    Q_PROPERTY(int ConnectionPort READ ConnectionPort WRITE setConnectionPort NOTIFY ConnectionPortChanged)
+
 
 /////////////////////////////////////////
 // Class & (de)Contsructor Definitions //
@@ -115,6 +118,29 @@ private: //Dependencies
 
 signals: //Signal to emit on change
     void ThrusterValuesChanged();
+
+/////////////////////////////////////////
+//         Connection Properties       //
+/////////////////////////////////////////
+
+//QML Property Definitions
+public:
+    //Read property
+    QString ConnectionIP() const;
+    int ConnectionPort() const;
+
+    //Write Property
+    void setConnectionIP(QString ip);
+    void setConnectionPort(int port);
+
+private: //Dependencies
+    QString connectionIP;
+    int     connectionPort;
+
+
+signals: //Signal to emit on change
+    void ConnectionIPChanged();
+    void ConnectionPortChanged();
 
 /////////////////////////////////////////
 //         Misc Public Slots           //

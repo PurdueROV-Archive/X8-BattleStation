@@ -124,6 +124,28 @@ void Controller::SetThrusterValues(int values[]) {
 }
 
 /////////////////////////////////////////
+//         Connection Properties       //
+/////////////////////////////////////////
+
+QString Controller::ConnectionIP() const {
+    return this->connectionIP;
+}
+int Controller::ConnectionPort() const {
+    return this->connectionPort;
+}
+
+//Write Property
+void Controller::setConnectionIP(QString ip) {
+    this->connectionIP = ip;
+    emit ConnectionIPChanged();
+}
+
+void Controller::setConnectionPort(int port) {
+    this->connectionPort = port;
+    emit ConnectionPortChanged();
+}
+
+/////////////////////////////////////////
 //         Misc Public Slots           //
 /////////////////////////////////////////
 
