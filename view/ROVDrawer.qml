@@ -7,14 +7,18 @@ Rectangle {
 
     default property alias children: body.children
     property int offset: 0
+
+    opacity: 0
     color: "#111111"
+
+    x: parent.width - offset
+    z: 100
     width: 400
     height: parent.height - 60
     anchors.bottom: parent.bottom
-    opacity: 0
-    x: parent.width - offset
-    Behavior on x {NumberAnimation {duration: 100}}
-    z: 100
+
+
+    Behavior on x {NumberAnimation {duration: 1}}
 
     MouseArea {
         anchors.fill: parent

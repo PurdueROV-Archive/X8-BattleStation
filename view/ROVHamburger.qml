@@ -12,6 +12,7 @@ Item {
     width: parent.height/2
 
     property bool open: false
+    property bool switchIt: true
     clip: true
 
 
@@ -51,80 +52,37 @@ Item {
         Behavior on rotation {NumberAnimation {duration: 100}}
     }
 
-    Rectangle {
-        id: woop
-        property int size: 0
-        property int max: parent.width*1.5
-        width: size
-        height: size
-        radius: size
-        color: "white"
-        anchors.centerIn: parent
-        opacity: 0.3
-
-        SequentialAnimation {
-            id: animation
-            NumberAnimation {
-                target: woop
-                property: "size"
-                from: 0
-                to: woop.max
-                duration: 150
-            }
-            NumberAnimation {
-                target: woop
-                property: "opacity"
-                from: 0.3
-                to: 0.0
-                duration: 100
-            }
-        }
-    }
-
     MouseArea {
         id: hamClick
         anchors.fill: parent
         onClicked: {
-            //animation.stop()
-            //woop.size = 0
-            //woop.opacity = 0.3
-            //animation.start()
-
             if (!open) {
                 drawer.opacity = 1
                 drawer.offset = drawer.width
 
                 top.y = top.parent.height/2 - top.height/2
-                top.rotation = 45
+                top.rotation = (switchIt) ? -45 : 45
 
                 mid.x = -mid.width
-                //mid.opacity = 0
 
                 bottom.y = bottom.parent.height/2 - bottom.height/2
-                bottom.rotation = -45
+                bottom.rotation = (switchIt) ? 45 : -45
 
                 open = true
             } else {
                 drawer.offset = 0
 
-                top.y = 0
+                top.y = (switchIt) ? top.parent.height - top.height : 0;
                 top.rotation = 0
 
                 mid.x = 0
 
-                bottom.y = bottom.parent.height - bottom.height
+                bottom.y = (switchIt) ? 0 : bottom.parent.height - bottom.height
                 bottom.rotation = 0
 
                 open = false
+                switchIt = !switchIt
             }
-
-
         }
-    }
-
-    function toggle() {
-
-
-
     }
 }
