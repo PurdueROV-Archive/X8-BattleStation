@@ -9,7 +9,7 @@
 #undef main
 
 #define INT_16_MAX 32767
-#define INT_16_MIN 32768
+#define INT_16_MIN -32768
 
 
 #define JOYSTICK_A 10
@@ -29,6 +29,8 @@
 
 #define JOYSTICK_L3 6
 #define JOYSTICK_R3 7
+
+
 
 #define JOYSTICK_LEFTBUTTON 8
 #define JOYSTICK_RIGHTBUTTON 9
@@ -69,7 +71,7 @@ public:
     bool getButtonPressed(int buttonId);
     bool getButtonReleased(int buttonId);
 
-    qint32 getAxis(int axisId);
+    qint16 getAxis(int axisId);
 
     void update();
 
@@ -89,8 +91,6 @@ private:
 
     int joystickId;
     SDL_Joystick* sdlJoystick;
-
-
 
 signals:
 

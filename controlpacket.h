@@ -5,12 +5,12 @@
 
 #define PACKET_SIZE 30
 
-#define HEADER 'h' //0x12
-#define TAIL 't' //0x13
+#define HEADER 0x12
+#define TAIL   0x13
 
-#define CONTROL '1' //0x01
+#define CONTROL 0x01
 
-#define CRC_BYTE 'c' //0xC5
+#define CRC_BYTE 0xC5
 
 class ControlPacket
 {
@@ -31,7 +31,6 @@ public:
     void reset();
 
     void print();
-
 
 private:
     quint8 size;

@@ -37,7 +37,7 @@ QByteArray UDPSocket::read() {
     }
 
     if (socket->hasPendingDatagrams()) {
-        return socket->read(30);
+        return socket->readAll();
     }
 
     return NULL;

@@ -12,7 +12,7 @@
 #include "thrust_mapping/matrices.h"
 #include "thrust_mapping/thrust_mapper.h"
 
-#define TICK_INTERVAL 500
+#define TICK_INTERVAL 10
 
 class Mainthread : public QObject
 {
@@ -20,7 +20,7 @@ class Mainthread : public QObject
 
 
 public:
-    Mainthread(Joystick* joystick1);
+    Mainthread(Joystick* joystick);
     ~Mainthread();
 
     bool start();
@@ -34,7 +34,7 @@ private:
     QTimer* threadTimer;
     qint64 lastTime;
     UDPSocket* udp;
-    Joystick* joystick1;
+    Joystick* joystick;
     ThrustMapper* thrustMapper;
 };
 
