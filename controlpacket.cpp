@@ -100,7 +100,7 @@ void ControlPacket::reset() {
 void ControlPacket::print() {
     assemblePacket();
 
-    qDebug("Header:\t 0x%x", data.at(0));
+    qDebug("Header:\t\t 0x%x", data.at(0));
     qDebug("Control:\t 0x0%x", data.at(1));
 
     qint16 printX = 0;
@@ -112,9 +112,9 @@ void ControlPacket::print() {
     qint16 printZ = 0;
     memcpy(&printZ, &data.constData()[6], 2);
 
-    qDebug("X:\t %d", printX);
-    qDebug("Y:\t %d", printY);
-    qDebug("Z:\t %d", printZ);
+    qDebug("X:\t\t %d", printX);
+    qDebug("Y:\t\t %d", printY);
+    qDebug("Z:\t\t %d", printZ);
 
     qint16 printRoll = 0;
     memcpy(&printRoll, &data.constData()[8], 2);
@@ -125,36 +125,36 @@ void ControlPacket::print() {
     qint16 printYaw = 0;
     memcpy(&printYaw, &data.constData()[12], 2);
 
-    qDebug("Roll:\t %d",  printRoll);
-    qDebug("Pitch:\t %d", printPitch);
-    qDebug("Yaw:\t %d",   printYaw);
+    qDebug("Roll:\t\t %d",  printRoll);
+    qDebug("Pitch:\t\t %d", printPitch);
+    qDebug("Yaw:\t\t %d",   printYaw);
 
-    qDebug("Snoids:\t %d%d %d%d %d%d %d%d",
-           data.at(14) & 0b10000000 ? 1 : 0,
-           data.at(14) & 0b01000000 ? 1 : 0,
-           data.at(14) & 0b00100000 ? 1 : 0,
-           data.at(14) & 0b00010000 ? 1 : 0,
-           data.at(14) & 0b00001000 ? 1 : 0,
-           data.at(14) & 0b00000100 ? 1 : 0,
-           data.at(14) & 0b00000010 ? 1 : 0,
-           data.at(14) & 0b00000001 ? 1 : 0
+    qDebug("Snoids:\t\t %d%d %d%d %d%d %d%d",
+           data.at(14) & 0x80 ? 1 : 0,
+           data.at(14) & 0x40 ? 1 : 0,
+           data.at(14) & 0x20 ? 1 : 0,
+           data.at(14) & 0x10 ? 1 : 0,
+           data.at(14) & 0x08 ? 1 : 0,
+           data.at(14) & 0x04 ? 1 : 0,
+           data.at(14) & 0x02 ? 1 : 0,
+           data.at(14) & 0x01 ? 1 : 0
            );
 
-    qDebug("H.Pump:\t %d", data.at(15));
-    qDebug("LEDs:\t %d", data.at(16));
+    qDebug("H.Pump:\t\t %d", data.at(15));
+    qDebug("LEDs:\t\t %d", data.at(16));
 
     qDebug("T. Stat:\t %d %d %d %d %d %d %d %d",
-           data.at(17) & 0b10000000 ? 1 : 0,
-           data.at(17) & 0b01000000 ? 1 : 0,
-           data.at(17) & 0b00100000 ? 1 : 0,
-           data.at(17) & 0b00010000 ? 1 : 0,
-           data.at(17) & 0b00001000 ? 1 : 0,
-           data.at(17) & 0b00000100 ? 1 : 0,
-           data.at(17) & 0b00000010 ? 1 : 0,
-           data.at(17) & 0b00000001 ? 1 : 0
+           data.at(17) & 0x80 ? 1 : 0,
+           data.at(17) & 0x40 ? 1 : 0,
+           data.at(17) & 0x20 ? 1 : 0,
+           data.at(17) & 0x10 ? 1 : 0,
+           data.at(17) & 0x08 ? 1 : 0,
+           data.at(17) & 0x04 ? 1 : 0,
+           data.at(17) & 0x02 ? 1 : 0,
+           data.at(17) & 0x01 ? 1 : 0
            );
 
-    qDebug("PID:\t %s", data.at(18) ? "Yes" : "No");
+    qDebug("PID:\t\t %s", data.at(18) ? "Yes" : "No");
 
     qint16 printTuningA = 0;
     memcpy(&printTuningA, &data.constData()[19], 2);
@@ -165,14 +165,14 @@ void ControlPacket::print() {
     qint16 printTuningC = 0;
     memcpy(&printTuningC, &data.constData()[23], 2);
 
-    qDebug("PID A:\t %d", printTuningA);
-    qDebug("PID B:\t %d", printTuningB);
-    qDebug("PID C:\t %d", printTuningC);
+    qDebug("PID A:\t\t %d", printTuningA);
+    qDebug("PID B:\t\t %d", printTuningB);
+    qDebug("PID C:\t\t %d", printTuningC);
 
     qDebug("Pivot X:\t %d", (qint8) data.at(25));
     qDebug("Pivot Y:\t %d", (qint8) data.at(26));
     qDebug("Pivot Z:\t %d", (qint8) data.at(27));
 
-    qDebug("Check:\t 0x%x", (quint8) data.at(PACKET_SIZE-2));
-    qDebug("Tail:\t 0x%x", data.at(PACKET_SIZE-1));
+    qDebug("Check:\t\t 0x%x", (quint8) data.at(PACKET_SIZE-2));
+    qDebug("Tail:\t\t 0x%x", data.at(PACKET_SIZE-1));
 }
