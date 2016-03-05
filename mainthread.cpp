@@ -1,7 +1,7 @@
 #include "mainthread.h"
 #include "controller.h"
 
-Mainthread::Mainthread(Joystick *joystick1) : QObject() {
+Mainthread::Mainthread(Joystick* joystick) : QObject() {
 
     //TODO: Pass in other needed objects
 
@@ -11,9 +11,7 @@ Mainthread::Mainthread(Joystick *joystick1) : QObject() {
 
     lastTime = 0;
 
-    this->joystick1 = joystick1;
-
-    //controller = Controller::getInstance();
+    this->joystick = joystick;
 
     //Connect thredTimer timeout to tick slot
     connect(threadTimer, SIGNAL(timeout()), SLOT(tick()), Qt::DirectConnection);
@@ -34,9 +32,10 @@ bool Mainthread::start() {
     //initialize stuff here
 
     udp = new UDPSocket();
-    udp->initSocket("192.168.1.100", 5100);
+    udp->initSocket(Controller::getInstance()->ConnectionIP(),
+                    Controller::getInstance()->ConnectionPort());
 
-    joystick1->connect();
+    joystick->connect();
 
     thrustMapper = new ThrustMapper();
 
@@ -49,7 +48,7 @@ void Mainthread::stop() {
     threadTimer->stop();
     udp->closeSocket();
 
-    joystick1->disconnect();
+    joystick->disconnect();
 }
 
 
@@ -57,49 +56,56 @@ void Mainthread::stop() {
 //main while loop where it ticks every 10ms
 void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
-    //qDebug() << now-lastTime;
 
-    joystick1->update();
+    joystick->update();
 
+    /*
     vect6 targetvector;
 
-    targetvector.L.x = joystick1->getAxis(JOYSTICK_LJ_Y) * -1;
-    targetvector.L.z = (joystick1->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick1->getAxis(JOYSTICK_LTRIGG) / 2);
+    targetvector.L.z = joystick->getAxis(JOYSTICK_LJ_Y) * -1;
+    targetvector.L.y = (joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2);
 
-    int l = joystick1->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
-    int r = joystick1->getButtonState(JOYSTICK_RIGHTBUTTON);
-    targetvector.L.y = (l + r) * INT16_MAX;
+    int l = joystick->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
+    int r = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
+    targetvector.L.x = (l + r) * INT_16_MAX;
 
-    targetvector.R.x = joystick1->getAxis(JOYSTICK_RJ_X);
-    targetvector.R.y = joystick1->getAxis(JOYSTICK_RJ_Y) * -1;
-    targetvector.R.z = joystick1->getAxis(JOYSTICK_LJ_X);
-
-    qDebug("L: x: %d, y: %d, z: %d\n", targetvector.L.x, targetvector.L.y, targetvector.L.z);
-    qDebug("R: x: %d, y: %d, z: %d\n", targetvector.R.x, targetvector.R.y, targetvector.R.z);
+    targetvector.R.z = joystick->getAxis(JOYSTICK_RJ_X);
+    targetvector.R.x = joystick->getAxis(JOYSTICK_RJ_Y) * -1;
+    targetvector.R.y = joystick->getAxis(JOYSTICK_LJ_X) * -1;
 
     ThrustMapper* tm = new ThrustMapper();
     tm->calculateThrustMap(targetvector);
 
     vect8 m = tm->thrust_map;
-    qDebug("%d         %d\n", m.a, m.b);
-    qDebug("   %d  %d  \n",   m.c, m.d);
-    qDebug("   %d  %d  \n",   m.e, m.f);
-    qDebug("%d         %d\n", m.g, m.h);
+    //qDebug("%d         %d\n", m.a, m.b);
+    //qDebug("   %d  %d  \n",   m.e, m.f);
+    //qDebug("   %d  %d  \n",   m.g, m.h);
+    //qDebug("%d         %d\n", m.c, m.d);
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
+    */
+
+    qDebug() << Controller::getInstance()->ConnectionIP();
 
     ControlPacket* cp = new ControlPacket();
+
+    cp->setX(joystick->getAxis(JOYSTICK_LJ_Y));
+
+    int leftButton = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
+    int rightButton = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
+    cp->setY((rightButton - leftButton) * INT_16_MAX);
+
+    cp->setZ((joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2));
+
+    cp->setRoll(joystick->getAxis(JOYSTICK_RJ_X));
+    cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
+    cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
+
     //cp->print();
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
-
-    if (returnData.size() > 0) {
-        for (int i = 0; i < 30; ++i) {
-            qDebug("[%d]: %c", i, (quint8) returnData.at(i));
-        }
-    }
 
 
     lastTime = now;

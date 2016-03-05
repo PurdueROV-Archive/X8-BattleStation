@@ -5,7 +5,7 @@ import QtQuick.Controls.Styles 1.2
 
 CheckBox {
     id: checkTask
-    property int size: (parent.width < 550) ? 16 : 20;
+    property int size: 16;
     property int worth: 0
     property int value: checkTask.checked ? worth : 0
 
@@ -30,19 +30,19 @@ CheckBox {
                 Label {
                     text: "✓"
                     color: "white"
-                    font.pixelSize: checkTask.size-8
+                    font.pixelSize: checkTask.size-6
                     font.bold: true
                     width: checkTask.size
                     height: checkTask.size
                     horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignTop
+                    verticalAlignment: Text.AlignVCenter
                 }
             }
         }
 
         label: Text {
             id: taskLabel
-            color: checkTask.checked ? "#666666" : "#ffffff"
+            color: checkTask.checked ? "#666666" : "white"
             font.pixelSize: size
             font.strikeout: checkTask.checked
             text: checkTask.text

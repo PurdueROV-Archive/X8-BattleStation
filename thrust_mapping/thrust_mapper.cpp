@@ -29,14 +29,15 @@ ThrustMapper::ThrustMapper(void)
 	mapper_matrices.matrices[7] = mapper_matrices.minus_t7;
 	mapper_matrices.matrices[8] = mapper_matrices.minus_t8;
 
-	mapper_matrices.matrices[0].t1 = vect6Make(  732,     0,   269,     0, -1311,     0);
-	mapper_matrices.matrices[0].t2 = vect6Make( -732,     0,   276,     0,  1311,     0);
-	mapper_matrices.matrices[0].t3 = vect6Make(  765,     0,  -269,     0,  1311,     0);
-	mapper_matrices.matrices[0].t4 = vect6Make( -765,     0,  -276,     0, -1311,     0);
-	mapper_matrices.matrices[0].t5 = vect6Make(   14,   223,   -19,  2364,     0,  1809);
-	mapper_matrices.matrices[0].t6 = vect6Make(  -14,   232,   -19,  2364,     0, -1809);
-	mapper_matrices.matrices[0].t7 = vect6Make(   14,   280,    19, -2364,     0,  1809);
-	mapper_matrices.matrices[0].t8 = vect6Make(  -14,   289,    19, -2364,     0, -1809);
+    //Divided rotational values by 10
+    mapper_matrices.matrices[0].t1 = vect6Make(  732,     0,   269,     0,  -131,     0);
+    mapper_matrices.matrices[0].t2 = vect6Make( -732,     0,   276,     0,   131,     0);
+    mapper_matrices.matrices[0].t3 = vect6Make(  765,     0,  -269,     0,   131,     0);
+    mapper_matrices.matrices[0].t4 = vect6Make( -765,     0,  -276,     0,  -131,     0);
+    mapper_matrices.matrices[0].t5 = vect6Make(    0,   280,     0,   236,     0,   181);
+    mapper_matrices.matrices[0].t6 = vect6Make(    0,   280,     0,   236,     0,  -181);
+    mapper_matrices.matrices[0].t7 = vect6Make(    0,   280,     0,  -236,     0,   181);
+    mapper_matrices.matrices[0].t8 = vect6Make(    0,   280,     0,  -236,     0,  -181);
 
 	mapper_matrices.matrices[1].t1 = vect6Make(    0,     0,     0,     0,     0,     0);
 	mapper_matrices.matrices[1].t2 = vect6Make(-1465,     0,     7,     0,  2621,     0);
@@ -166,6 +167,7 @@ void ThrustMapper::calculateThrustMap(vect6 target_vector)
 	desired_force_vector.L.x += cross_result.x;
 	desired_force_vector.L.y += cross_result.y;
 	desired_force_vector.L.z += cross_result.z;
+
 	thrust_map = matMul_86x61(mapper_matrices.matrices[mapper_matrices.currentMapperMatrix], desired_force_vector);
 }
 

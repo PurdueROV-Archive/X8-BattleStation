@@ -20,7 +20,7 @@ class Mainthread : public QObject
 
 
 public:
-    Mainthread(Joystick* joystick1);
+    Mainthread(Joystick* joystick);
     ~Mainthread();
 
     bool start();
@@ -34,7 +34,7 @@ private:
     QTimer* threadTimer;
     qint64 lastTime;
     UDPSocket* udp;
-    Joystick* joystick1;
+    Joystick* joystick;
     ThrustMapper* thrustMapper;
 };
 

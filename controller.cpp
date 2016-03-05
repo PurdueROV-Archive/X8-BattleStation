@@ -88,10 +88,19 @@ QStringList Controller::JoystickDevices() const {
     return joystickDevices;
 }
 
+int Controller::JoystickCount() const {
+    return SdlWrap::getNumJoysticks();
+}
+
+QString Controller::JoystickName() const {
+    return SdlWrap::getJoystickName(joystickIndex);
+}
+
 //Select a device
 void Controller::JoystickSelect(int index) {
     joystickIndex = index;
     joystick->select(index);
+    emit JoystickNameChanged();
 }
 
 
@@ -115,12 +124,35 @@ void Controller::SetThrusterValues(int values[]) {
 }
 
 /////////////////////////////////////////
+//         Connection Properties       //
+/////////////////////////////////////////
+
+QString Controller::ConnectionIP() const {
+    return this->connectionIP;
+}
+int Controller::ConnectionPort() const {
+    return this->connectionPort;
+}
+
+//Write Property
+void Controller::setConnectionIP(QString ip) {
+    this->connectionIP = ip;
+    emit ConnectionIPChanged();
+}
+
+void Controller::setConnectionPort(int port) {
+    this->connectionPort = port;
+    emit ConnectionPortChanged();
+}
+
+/////////////////////////////////////////
 //         Misc Public Slots           //
 /////////////////////////////////////////
 
 //Refresh Serial Devices
 void Controller::RefreshLists() {
     joystickDevices = SdlWrap::getJoystickList();
+    emit JoystickCountChanged();
     emit JoystickDevicesChanged();
 }
 

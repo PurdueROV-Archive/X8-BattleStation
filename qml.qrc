@@ -21,5 +21,8 @@
         <file>view/GUIMissionTasks.qml</file>
         <file>view/MissionTasks1.qml</file>
         <file>view/GUIThrusters.qml</file>
+        <file>view/ROVHamburger.qml</file>
+        <file>view/ROVDrawer.qml</file>
+        <file>view/GUIDrawerConfiguration.qml</file>
     </qresource>
 </RCC>

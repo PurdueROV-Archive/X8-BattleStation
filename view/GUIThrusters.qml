@@ -30,22 +30,22 @@ ROVCard {
             ROVThruster {
                 orientation: "horizontal";
                 rotation: 20;
-                value: (controller.Running) ? controller.ThrusterValues[0] : "Off"
+                value: (controller.Running && controller.ThrusterValues[0]) ? controller.ThrusterValues[0] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
                 rotation: -20;
-                value: (controller.Running) ? controller.ThrusterValues[1] : "Off"
+                value: (controller.Running && controller.ThrusterValues[1]) ? controller.ThrusterValues[1] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
                 rotation: 160;
-                value: (controller.Running) ? controller.ThrusterValues[2] : "Off"
+                value: (controller.Running && controller.ThrusterValues[2]) ? controller.ThrusterValues[2] : "Off"
             }
             ROVThruster {
                 orientation: "horizontal";
                 rotation: 200;
-                value: (controller.Running) ? controller.ThrusterValues[3] : "Off"
+                value: (controller.Running && controller.ThrusterValues[3]) ? controller.ThrusterValues[3] : "Off"
             }
 
         }
@@ -61,19 +61,19 @@ ROVCard {
             spacing: 2
             ROVThruster {
                 orientation: "vertical";
-                value: (controller.Running) ? controller.ThrusterValues[4] : "Off"
+                value: (controller.Running && controller.ThrusterValues[4]) ? controller.ThrusterValues[4] : "Off"
             }
             ROVThruster {
                 orientation: "vertical";
-                value: (controller.Running) ? controller.ThrusterValues[5] : "Off"
+                value: (controller.Running && controller.ThrusterValues[5]) ? controller.ThrusterValues[5] : "Off"
             }
             ROVThruster {
                 orientation: "vertical";
-                value: (controller.Running) ? controller.ThrusterValues[6] : "Off"
+                value: (controller.Running && controller.ThrusterValues[6]) ? controller.ThrusterValues[6] : "Off"
             }
             ROVThruster {
                 orientation: "vertical";
-                value: (controller.Running) ? controller.ThrusterValues[7] : "Off"
+                value: (controller.Running && controller.ThrusterValues[7]) ? controller.ThrusterValues[7] : "Off"
             }
         }
     }

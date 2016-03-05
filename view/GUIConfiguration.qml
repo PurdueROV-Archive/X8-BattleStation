@@ -23,8 +23,9 @@ ROVCard {
 
         spacing: 10
 
+
         Label {
-            text: "Joystick 1:"
+            text: "Joystick 1: " + controller.JoystickName
             anchors.left: parent.left;
             anchors.right: parent.right
 
@@ -32,47 +33,28 @@ ROVCard {
             font.pixelSize: 18
             color: "white"
         }
-
-        ComboBox {
-            id: joystick1Combo
-            height: 30
+        Label {
+            text: "Connection " + controller.ConnectionIP + ":" + controller.ConnectionPort
             anchors.left: parent.left;
-            anchors.right: parent.right;
-            model: controller.JoystickDevices
-            enabled: !controller.Running
-            onCurrentIndexChanged: controller.JoystickSelect(currentIndex-1)
+            anchors.right: parent.right
+
+            font.bold: true
+            font.pixelSize: 18
+            color: "white"
         }
+    }
 
-        Row {
-            width: 320
-            height: 30
-            spacing: 20
+    ROVButton {
+        id: threadControl
+        height: 30
+        width: 150
+        anchors.centerIn: parent
 
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ROVButton {
-                id: refresh
-                height: 30
-                width: 150
-                text: "Refresh"
-                fontSize: 20
-                enabled: !controller.Running
-                onClicked: controller.RefreshLists()
-            }
-
-            ROVButton {
-                id: threadControl
-                height: 30
-                width: 150
-
-                text: (!controller.Running) ? "Connect" : "Stop"
-                enabled: (joystick1Combo.count > 1 && joystick1Combo.currentIndex >= 1)
-                fontSize: 20
-                onClicked: {
-                    if (joystick1Combo.count > 1 && joystick1Combo.currentIndex >= 1)
-                        controller.Running = !controller.Running
-                }
-            }
+        text: (!controller.Running) ? "Connect" : "Stop"
+        enabled: controller.JoystickCount > 0
+        fontSize: 20
+        onClicked: {
+            controller.Running = !controller.Running
         }
     }
 }
