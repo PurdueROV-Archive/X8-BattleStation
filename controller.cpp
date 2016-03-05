@@ -88,10 +88,19 @@ QStringList Controller::JoystickDevices() const {
     return joystickDevices;
 }
 
+int Controller::JoystickCount() const {
+    return SdlWrap::getNumJoysticks();
+}
+
+QString Controller::JoystickName() const {
+    return SdlWrap::getJoystickName(joystickIndex);
+}
+
 //Select a device
 void Controller::JoystickSelect(int index) {
     joystickIndex = index;
     joystick->select(index);
+    emit JoystickNameChanged();
 }
 
 
@@ -121,6 +130,7 @@ void Controller::SetThrusterValues(int values[]) {
 //Refresh Serial Devices
 void Controller::RefreshLists() {
     joystickDevices = SdlWrap::getJoystickList();
+    emit JoystickCountChanged();
     emit JoystickDevicesChanged();
 }
 

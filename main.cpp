@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
 
     Controller* control = Controller::getInstance();
     engine.rootContext()->setContextProperty("controller", control);
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

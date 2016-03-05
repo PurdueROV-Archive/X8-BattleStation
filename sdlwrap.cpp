@@ -30,9 +30,12 @@ QStringList SdlWrap::getJoystickList() {
     SDL_JoystickUpdate();
 
     deviceList.clear();
-    deviceList.append(" ");
+
 
     int len = SdlWrap::getNumJoysticks();
+    if (len == 0) {
+        deviceList.append(" ");
+    }
 
     for(int i = 0; i < len; i++) {
         QString info = QString(SDL_JoystickNameForIndex(i));

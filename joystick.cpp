@@ -112,8 +112,8 @@ qint16 Joystick::getAxis(int axisId) {
         value *= -1;
     }
 
-    if (value > INT16_MAX) value = INT16_MAX;
-    if (value < INT16_MIN) value = INT16_MIN;
+    if (value > INT_16_MAX) value = INT_16_MAX;
+    if (value < INT_16_MIN) value = INT_16_MIN;
 
     return (qint16) value;
 }

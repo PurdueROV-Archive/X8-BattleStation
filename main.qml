@@ -19,7 +19,7 @@ Window {
     visible: true
     width: 1920
     height: 1010
-    visibility: "Maximized"
+    //visibility: "Maximized"
     color: "#151515"
     title: "Purdue IEEE | ROV " + rovName
     objectName: "mainWindow"
@@ -51,7 +51,20 @@ Window {
             color: "black"
             opacity: 0.2
         }
+
+        ROVView.ROVHamburger {
+            drawer: drawer
+        }
+
+
     }
+
+    ROVView.ROVDrawer {
+        id: drawer
+
+        ROVView.GUIDrawerConfiguration{}
+    }
+
 
     Item {
         objectName: "mainGrid"
