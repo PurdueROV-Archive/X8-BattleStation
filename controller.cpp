@@ -29,10 +29,18 @@ void Controller::init() {
     joystickDevices = SdlWrap::getJoystickList();
     thrusterValues = QStringList();
 
+    tempData = QList<int>();
+    tempData.append(20);
+    tempData.append(0);
+    tempData.append(-10);
+    tempData.append(-20);
+    tempData.append(0);
+
     joystick = new Joystick();
 
     qThread = new QThread(this);
     mainthread = new Mainthread(joystick);
+
 }
 
 
@@ -121,6 +129,21 @@ void Controller::SetThrusterValues(int values[]) {
     }
 
     emit ThrusterValuesChanged();
+}
+
+
+/////////////////////////////////////////
+//          TempData Properties        //
+/////////////////////////////////////////
+
+QList<int> Controller::TempData() const {
+    return tempData;
+}
+
+void Controller::addTempData(int data) {
+    tempData.removeFirst();
+    tempData.append(data);
+    emit TempDataChanged();
 }
 
 /////////////////////////////////////////

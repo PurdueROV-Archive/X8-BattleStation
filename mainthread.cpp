@@ -1,6 +1,6 @@
 #include "mainthread.h"
 #include "controller.h"
-
+#include <thread>
 Mainthread::Mainthread(Joystick* joystick) : QObject() {
 
     //TODO: Pass in other needed objects
@@ -38,7 +38,6 @@ bool Mainthread::start() {
     joystick->connect();
 
     thrustMapper = new ThrustMapper();
-
     return true;
 }
 
@@ -58,6 +57,8 @@ void Mainthread::tick() {
     qint64 now = QDateTime::currentMSecsSinceEpoch();
 
     joystick->update();
+
+    Controller::getInstance()->addTempData(20);
 
     /*
     vect6 targetvector;

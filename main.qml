@@ -146,6 +146,15 @@ Window {
                 anchors.right: parent.right
                 height: parent.height/2
                 headerColor: mainColor
+
+                ROVView.ROVGraph {
+                     id: graph
+                     anchors.fill: parent
+                     property int minData: -30
+                     property int maxData: 30
+                     property variant data: controller.TempData
+                     property int number: data.length
+                 }
             }
 
             ROVView.GUIThrusters{}

@@ -24,5 +24,6 @@
         <file>view/ROVHamburger.qml</file>
         <file>view/ROVDrawer.qml</file>
         <file>view/GUIDrawerConfiguration.qml</file>
+        <file>view/ROVGraph.qml</file>
     </qresource>
 </RCC>
