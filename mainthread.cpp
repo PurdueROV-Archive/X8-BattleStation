@@ -58,7 +58,8 @@ void Mainthread::tick() {
 
     joystick->update();
 
-    Controller::getInstance()->addTempData(20);
+
+    Controller::getInstance()->addTempData(qrand() % ((18 + 1) + 10) -10);
 
     /*
     vect6 targetvector;
@@ -86,8 +87,6 @@ void Mainthread::tick() {
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
     */
-
-    qDebug() << Controller::getInstance()->ConnectionIP();
 
     ControlPacket* cp = new ControlPacket();
 

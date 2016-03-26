@@ -143,6 +143,7 @@ QList<int> Controller::TempData() const {
 void Controller::addTempData(int data) {
     tempData.removeFirst();
     tempData.append(data);
+
     emit TempDataChanged();
 }
 
