@@ -19,7 +19,7 @@ Window {
     visible: true
     width: 1920
     height: 1010
-    //visibility: "Maximized"
+    visibility: "Maximized"
     color: "#151515"
     title: "Purdue IEEE | ROV " + rovName
     objectName: "mainWindow"
@@ -120,6 +120,14 @@ Window {
                 anchors.right: parent.right
                 height: parent.height/2
                 headerColor: mainColor
+
+                ROVView.ROVGraph {
+                    anchors.fill: parent
+                    data: [10, 20, 30, 20, 15]
+                    minData: 0
+                    maxData: 35
+                    number: 5
+                }
             }
 
             ROVView.GUIConfiguration{}
