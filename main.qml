@@ -114,13 +114,7 @@ Window {
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
 
-            ROVView.ROVCard {
-                title: "Telemetry"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: parent.height/2
-                headerColor: mainColor
-            }
+            ROVView.ROVTelemetry{}
 
             ROVView.GUIConfiguration{}
 

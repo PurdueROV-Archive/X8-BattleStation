@@ -36,6 +36,9 @@ void Controller::init() {
     tempData.append(-20);
     tempData.append(0);
 
+    rotation = 0;
+    pitch = 0;
+
     joystick = new Joystick();
 
     qThread = new QThread(this);
@@ -167,6 +170,28 @@ void Controller::setConnectionIP(QString ip) {
 void Controller::setConnectionPort(int port) {
     this->connectionPort = port;
     emit ConnectionPortChanged();
+}
+
+/////////////////////////////////////////
+//          Rotation Properties        //
+/////////////////////////////////////////
+
+int Controller::Rotation() const {
+    return this->rotation;
+}
+
+void Controller::setRotation(int rotation) {
+    this->rotation = (rotation % 360);
+    emit RotationChanged();
+}
+
+int Controller::Pitch() const {
+    return this->pitch;
+}
+
+void Controller::setPitch(int pitch) {
+    this->pitch = (pitch % 360);
+    emit PitchChanged();
 }
 
 /////////////////////////////////////////
