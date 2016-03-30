@@ -32,8 +32,9 @@ bool Mainthread::start() {
     //initialize stuff here
 
     udp = new UDPSocket();
-    udp->initSocket(Controller::getInstance()->ConnectionIP(),
-                    Controller::getInstance()->ConnectionPort());
+    udp->initSocket("192.168.1.100", 5100);
+//    udp->initSocket(Controller::getInstance()->ConnectionIP(),
+//                    Controller::getInstance()->ConnectionPort());
 
     joystick->connect();
 
@@ -59,34 +60,33 @@ void Mainthread::tick() {
 
     joystick->update();
 
-    /*
+
     vect6 targetvector;
-
-    targetvector.L.z = joystick->getAxis(JOYSTICK_LJ_Y) * -1;
-    targetvector.L.y = (joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2);
-
-    int l = joystick->getButtonState(JOYSTICK_LEFTBUTTON) * -1;
-    int r = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
-    targetvector.L.x = (l + r) * INT_16_MAX;
-
-    targetvector.R.z = joystick->getAxis(JOYSTICK_RJ_X);
-    targetvector.R.x = joystick->getAxis(JOYSTICK_RJ_Y) * -1;
-    targetvector.R.y = joystick->getAxis(JOYSTICK_LJ_X) * -1;
-
     ThrustMapper* tm = new ThrustMapper();
+    tm->changeMapperMatrix(246);
+
+    targetvector.L.x = joystick->getAxis(JOYSTICK_LJ_Y);
+    int l = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
+    int r = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
+    targetvector.L.y = (r - l) * INT_16_MAX;
+
+    targetvector.L.z = (joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2);
+
+    targetvector.R.x = joystick->getAxis(JOYSTICK_RJ_X);
+    targetvector.R.y = joystick->getAxis(JOYSTICK_RJ_Y);
+    targetvector.R.z = joystick->getAxis(JOYSTICK_LJ_X);
+
     tm->calculateThrustMap(targetvector);
 
     vect8 m = tm->thrust_map;
-    //qDebug("%d         %d\n", m.a, m.b);
-    //qDebug("   %d  %d  \n",   m.e, m.f);
-    //qDebug("   %d  %d  \n",   m.g, m.h);
-    //qDebug("%d         %d\n", m.c, m.d);
+    qDebug("%d         %d\n", m.a, m.b);
+    qDebug("   %d  %d  \n",   m.e, m.f);
+    qDebug("   %d  %d  \n",   m.g, m.h);
+    qDebug("%d         %d\n", m.c, m.d);
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
-    */
 
-    qDebug() << Controller::getInstance()->ConnectionIP();
 
     ControlPacket* cp = new ControlPacket();
 
@@ -102,10 +102,32 @@ void Mainthread::tick() {
     cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
     cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
 
-    //cp->print();
+    ////
+    /// cp->print();
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
+    int size = returnData.size();
+    if (false) {
+        for (int i = 0; i < size; i++) {
+           qDebug("[%d]: %u", i, (quint8) returnData.at(i));
+        }
+
+        qint16 printA = 0;
+        memcpy(&printA, &returnData.constData()[1], 2);
+
+        qint16 printB = 0;
+        memcpy(&printB, &returnData.constData()[3], 2);
+
+        qint16 printC = 0;
+        memcpy(&printC, &returnData.constData()[5], 2);
+        qDebug("A: %d", printA);
+
+        qDebug("B: %d", printB);
+
+        qDebug("C: %d", printC);
+
+    }
 
 
     lastTime = now;
