@@ -33,4 +33,43 @@ import QtQuick 2.4
                 radius: width
             }
         }
+        Repeater {
+            model: (graph.maxData-graph.minData)/10 + 1
+        Rectangle {
+            id:line1
+            height: 1
+            width: parent.width
+            x:0
+            y:graph.height*index/Math.round((graph.maxData-graph.minData)/10) + 5
+        }
+        }
+
+       Repeater {
+           model:Math.round((graph.maxData-graph.minData)/10) + 1
+
+            Text {
+                text: graph.maxData - index * 10
+                x: 0
+                y: graph.height*index/Math.round((graph.maxData-graph.minData)/10)-20
+                font.pixelSize: 15
+                font.bold: true
+                //anchors.horizontalCenter: parent.horizontalCenter
+                color: "white"
+            }
+
+       }
+
+
+        Repeater {
+            model: graph.number
+
+            Text {
+                id:label
+                x: (graph.width-50)*index / (graph.number-1)
+                y: (graph.maxData-graph.data[index])*graph.height/(graph.maxData-graph.minData)-20
+                text: graph.data[index]
+                font.pixelSize: 15
+                color: "white"
+            }
+        }
 }

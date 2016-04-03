@@ -31,7 +31,7 @@ void Controller::init() {
 
     tempData = QList<int>();
     tempData.append(20);
-    tempData.append(0);
+    tempData.append(10);
     tempData.append(-10);
     tempData.append(-20);
     tempData.append(0);
