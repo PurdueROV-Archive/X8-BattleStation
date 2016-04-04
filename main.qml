@@ -157,15 +157,6 @@ Window {
                      property int number: data.length
                  }
 
-                Text {
-                id: averageTemp
-                text: "Average Temprature: " + average
-                color: "white"
-                anchors.horizontalCenter: parent.horizontalCenter
-                y: height/3
-                font.pointSize: 20
-                font.bold: true
-                }
             }
 
             ROVView.GUIThrusters{}

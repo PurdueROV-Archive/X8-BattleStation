@@ -72,4 +72,22 @@ import QtQuick 2.4
                 color: "white"
             }
         }
+
+        Rectangle {
+            id: averageBox
+            anchors.bottom: parent.bottom
+            height: 30
+            width: parent.width
+            color: "#212121"
+
+        Text {
+        id: averageTemp
+        property int average: (graph.data[0] + graph.data[1]+graph.data[2] + graph.data[3] + graph.data[4])/5
+        text: "Average Temprature: " + average
+        color: "white"
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.pointSize: 20
+        font.bold: true
+        }
+        }
 }
