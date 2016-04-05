@@ -1,6 +1,6 @@
 #include "mainthread.h"
 #include "controller.h"
-#include <thread>
+
 Mainthread::Mainthread(Joystick* joystick) : QObject() {
 
     //TODO: Pass in other needed objects
