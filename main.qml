@@ -114,7 +114,7 @@ Window {
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
 
-            ROVView.ROVTelemetry{}
+            ROVView.GUISystemStatus{}
 
 
             ROVView.GUIConfiguration{}
@@ -133,7 +133,7 @@ Window {
             anchors.rightMargin: 0
 
             ROVView.ROVCard {
-                title: "System Status"
+                title: "Sensor Data"
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: parent.height/2
