@@ -29,10 +29,21 @@ void Controller::init() {
     joystickDevices = SdlWrap::getJoystickList();
     thrusterValues = QStringList();
 
+    tempData = QList<int>();
+    tempData.append(20);
+    tempData.append(10);
+    tempData.append(-10);
+    tempData.append(-20);
+    tempData.append(0);
+
+    rotation = 0;
+    pitch = 0;
+
     joystick = new Joystick();
 
     qThread = new QThread(this);
     mainthread = new Mainthread(joystick);
+
 }
 
 
@@ -123,6 +134,22 @@ void Controller::SetThrusterValues(int values[]) {
     emit ThrusterValuesChanged();
 }
 
+
+/////////////////////////////////////////
+//          TempData Properties        //
+/////////////////////////////////////////
+
+QList<int> Controller::TempData() const {
+    return tempData;
+}
+
+void Controller::addTempData(int data) {
+    tempData.removeFirst();
+    tempData.append(data);
+
+    emit TempDataChanged();
+}
+
 /////////////////////////////////////////
 //         Connection Properties       //
 /////////////////////////////////////////
@@ -143,6 +170,28 @@ void Controller::setConnectionIP(QString ip) {
 void Controller::setConnectionPort(int port) {
     this->connectionPort = port;
     emit ConnectionPortChanged();
+}
+
+/////////////////////////////////////////
+//          Rotation Properties        //
+/////////////////////////////////////////
+
+int Controller::Rotation() const {
+    return this->rotation;
+}
+
+void Controller::setRotation(int rotation) {
+    this->rotation = (rotation % 360);
+    emit RotationChanged();
+}
+
+int Controller::Pitch() const {
+    return this->pitch;
+}
+
+void Controller::setPitch(int pitch) {
+    this->pitch = (pitch % 360);
+    emit PitchChanged();
 }
 
 /////////////////////////////////////////

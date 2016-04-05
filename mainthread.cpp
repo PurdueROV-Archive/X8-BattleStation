@@ -39,7 +39,6 @@ bool Mainthread::start() {
     joystick->connect();
 
     thrustMapper = new ThrustMapper();
-
     return true;
 }
 
@@ -60,6 +59,7 @@ void Mainthread::tick() {
 
     joystick->update();
 
+    Controller::getInstance()->addTempData(qrand() % ((18 + 1) + 10) -10);
 
     vect6 targetvector;
     ThrustMapper* tm = new ThrustMapper();
@@ -79,10 +79,6 @@ void Mainthread::tick() {
     tm->calculateThrustMap(targetvector);
 
     vect8 m = tm->thrust_map;
-    qDebug("%d         %d\n", m.a, m.b);
-    qDebug("   %d  %d  \n",   m.e, m.f);
-    qDebug("   %d  %d  \n",   m.g, m.h);
-    qDebug("%d         %d\n", m.c, m.d);
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
@@ -102,8 +98,13 @@ void Mainthread::tick() {
     cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
     cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
 
-    ////
-    /// cp->print();
+    float rotation = (float) joystick->getAxis(0) / (float) (INT_16_MAX);
+    Controller::getInstance()->setRotation(90 * rotation);
+
+    float pitch = (float) joystick->getAxis(1) / (float) (INT_16_MAX);
+    Controller::getInstance()->setPitch(90 * pitch);
+
+    //cp->print();
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();

@@ -114,26 +114,10 @@ Window {
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
 
-            ROVView.ROVCard {
-                title: "Telemetry"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: parent.height/2
-                headerColor: mainColor
+            ROVView.ROVTelemetry{}
 
-                ROVView.ROVGraph {
-                    anchors.fill: parent
-                    data: [10, 20, 30, 20, 15]
-                    minData: 0
-                    maxData: 35
-                    number: 5
-                }
-            }
 
             ROVView.GUIConfiguration{}
-
-
-
         }
 
         //Right Column
@@ -154,6 +138,17 @@ Window {
                 anchors.right: parent.right
                 height: parent.height/2
                 headerColor: mainColor
+
+                ROVView.ROVGraph {
+                     id: graph
+                     anchors.fill: parent
+                     height: 200
+                     property int minData: -30
+                     property int maxData: 30
+                     property variant data: controller.TempData
+                     property int number: data.length
+                 }
+
             }
 
             ROVView.GUIThrusters{}

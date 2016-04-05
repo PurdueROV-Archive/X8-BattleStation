@@ -36,6 +36,7 @@ private:
     UDPSocket* udp;
     Joystick* joystick;
     ThrustMapper* thrustMapper;
+
 };
 
 #endif // MAINTHREAD_H

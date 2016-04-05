@@ -8,7 +8,6 @@
 #include "joystick.h"
 #include "mainthread.h"
 
-
 class Controller : public QObject
 {
     Q_OBJECT
@@ -24,6 +23,11 @@ class Controller : public QObject
     Q_PROPERTY(QString ConnectionIP READ ConnectionIP WRITE setConnectionIP NOTIFY ConnectionIPChanged)
     Q_PROPERTY(int ConnectionPort READ ConnectionPort WRITE setConnectionPort NOTIFY ConnectionPortChanged)
 
+    Q_PROPERTY(QList<int> TempData READ TempData NOTIFY TempDataChanged)
+
+    Q_PROPERTY(int Rotation READ Rotation WRITE setRotation NOTIFY RotationChanged)
+    Q_PROPERTY(int Pitch READ Pitch WRITE setPitch NOTIFY PitchChanged)
+
 
 /////////////////////////////////////////
 // Class & (de)Contsructor Definitions //
@@ -36,6 +40,7 @@ private:
     Controller(Controller const&);
     void operator=(Controller const&);
     ~Controller();
+    void updateTempData();
 
     static Controller* instance;
     static QMutex mutex;
@@ -119,6 +124,26 @@ private: //Dependencies
 signals: //Signal to emit on change
     void ThrusterValuesChanged();
 
+
+/////////////////////////////////////////
+//          TempData Properties        //
+/////////////////////////////////////////
+
+//QML Property Definitions
+public:
+    //Read property
+    QList<int> TempData() const;
+
+    void addTempData(int data);
+
+
+private: //Dependencies
+    QList<int> tempData;
+
+
+signals: //Signal to emit on change
+    void TempDataChanged();
+
 /////////////////////////////////////////
 //         Connection Properties       //
 /////////////////////////////////////////
@@ -141,6 +166,28 @@ private: //Dependencies
 signals: //Signal to emit on change
     void ConnectionIPChanged();
     void ConnectionPortChanged();
+
+/////////////////////////////////////////
+//          Rotation Properties        //
+/////////////////////////////////////////
+
+//QML Property Definitions
+public:
+    //Read property
+    int Rotation() const;
+    int Pitch() const;
+
+    //Write Property
+    void setRotation(int rotation);
+    void setPitch(int pitch);
+
+private: //Dependencies
+    int rotation;
+    int pitch;
+
+signals: //Signal to emit on change
+    void RotationChanged();
+    void PitchChanged();
 
 /////////////////////////////////////////
 //         Misc Public Slots           //
