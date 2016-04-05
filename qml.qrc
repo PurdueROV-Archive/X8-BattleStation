@@ -25,5 +25,6 @@
         <file>view/ROVDrawer.qml</file>
         <file>view/GUIDrawerConfiguration.qml</file>
         <file>view/ROVGraph.qml</file>
+        <file>view/ROVTelemetry.qml</file>
     </qresource>
 </RCC>

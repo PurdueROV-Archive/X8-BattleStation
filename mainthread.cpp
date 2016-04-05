@@ -102,6 +102,12 @@ void Mainthread::tick() {
     cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
     cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
 
+    float rotation = (float) joystick->getAxis(0) / (float) (INT_16_MAX);
+    Controller::getInstance()->setRotation(90 * rotation);
+
+    float pitch = (float) joystick->getAxis(1) / (float) (INT_16_MAX);
+    Controller::getInstance()->setPitch(90 * pitch);
+
     //cp->print();
 
     udp->send(cp->getPacket());
