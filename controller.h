@@ -13,6 +13,7 @@ class Controller : public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool Running READ Running WRITE SetRunning NOTIFY RunningChanged)
+    Q_PROPERTY(bool Communication READ Communication WRITE SetCommunication NOTIFY CommunicationChanged)
 
     Q_PROPERTY(QStringList JoystickDevices READ JoystickDevices NOTIFY JoystickDevicesChanged)
     Q_PROPERTY(int JoystickCount READ JoystickCount NOTIFY JoystickCountChanged)
@@ -72,6 +73,22 @@ private:
 private: //Dependecies
     QThread* qThread;
     Mainthread* mainthread;
+
+/////////////////////////////////////////
+//      Communication Properties       //
+/////////////////////////////////////////
+
+//Running Property
+public:
+    bool Communication() const; //Read property
+
+    void SetCommunication(bool communication); //Write Property
+
+private: //Dependencies
+    bool communication;
+
+signals: //Signal to emit on change
+    void CommunicationChanged();
 
 /////////////////////////////////////////
 //     Joystick Control Properties     //

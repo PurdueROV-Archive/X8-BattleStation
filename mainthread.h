@@ -32,10 +32,11 @@ private slots:
 
 private:
     QTimer* threadTimer;
-    qint64 lastTime;
+    qint64 last_time;
+    qint64 last_comms;
     UDPSocket* udp;
     Joystick* joystick;
-    ThrustMapper* thrustMapper;
+    ThrustMapper* tmapper;
 
 };
 

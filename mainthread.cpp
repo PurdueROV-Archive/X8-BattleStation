@@ -9,9 +9,11 @@ Mainthread::Mainthread(Joystick* joystick) : QObject() {
     threadTimer->setTimerType(Qt::PreciseTimer);
     threadTimer->setInterval(TICK_INTERVAL);
 
-    lastTime = 0;
+    last_time  = 0;
+    last_comms = 0;
 
     this->joystick = joystick;
+    tmapper = new ThrustMapper();
 
     //Connect thredTimer timeout to tick slot
     connect(threadTimer, SIGNAL(timeout()), SLOT(tick()), Qt::DirectConnection);
@@ -33,12 +35,13 @@ bool Mainthread::start() {
 
     udp = new UDPSocket();
     udp->initSocket("192.168.1.100", 5100);
-//    udp->initSocket(Controller::getInstance()->ConnectionIP(),
-//                    Controller::getInstance()->ConnectionPort());
+    //udp->initSocket(Controller::getInstance()->ConnectionIP(),
+    //                Controller::getInstance()->ConnectionPort());
 
     joystick->connect();
 
-    thrustMapper = new ThrustMapper();
+    last_time  = QDateTime::currentMSecsSinceEpoch();
+
     return true;
 }
 
@@ -62,8 +65,7 @@ void Mainthread::tick() {
     Controller::getInstance()->addTempData(qrand() % ((18 + 1) + 10) -10);
 
     vect6 targetvector;
-    ThrustMapper* tm = new ThrustMapper();
-    tm->changeMapperMatrix(246);
+    tmapper->changeMapperMatrix(246);
 
     targetvector.L.x = joystick->getAxis(JOYSTICK_LJ_Y);
     int l = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
@@ -76,9 +78,9 @@ void Mainthread::tick() {
     targetvector.R.y = joystick->getAxis(JOYSTICK_RJ_Y);
     targetvector.R.z = joystick->getAxis(JOYSTICK_LJ_X);
 
-    tm->calculateThrustMap(targetvector);
+    tmapper->calculateThrustMap(targetvector);
 
-    vect8 m = tm->thrust_map;
+    vect8 m = tmapper->thrust_map;
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
     Controller::getInstance()->SetThrusterValues(thrusters);
@@ -109,7 +111,9 @@ void Mainthread::tick() {
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
     int size = returnData.size();
-    if (false) {
+    if (size > 0) {
+        last_comms = now;
+
         for (int i = 0; i < size; i++) {
            qDebug("[%d]: %u", i, (quint8) returnData.at(i));
         }
@@ -130,6 +134,7 @@ void Mainthread::tick() {
 
     }
 
+    Controller::getInstance()->SetCommunication(now - last_comms < 500);
 
-    lastTime = now;
+    last_time = now;
 }

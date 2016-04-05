@@ -1,12 +1,8 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
 
-ROVCard {
-    title: "Telemetry"
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: parent.height/2
-    headerColor: mainColor
+Item {
+    anchors.fill: parent
 
     Item {
         anchors.fill: parent
@@ -84,5 +80,4 @@ ROVCard {
         border.width: 5
         border.color: "black"
     }
-
 }

@@ -89,6 +89,21 @@ void Controller::stopThread() {
     emit RunningChanged();
 }
 
+/////////////////////////////////////////
+//      Communication Properties       //
+/////////////////////////////////////////
+
+//Read property
+bool Controller::Communication() const {
+    return this->communication;
+}
+
+//Write Property
+void Controller::SetCommunication(bool communication) {
+    this->communication = communication;
+    emit CommunicationChanged();
+}
+
 
 /////////////////////////////////////////
 //     Joystick Control Properties     //
