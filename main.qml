@@ -132,24 +132,7 @@ Window {
             anchors.right: mainGrid.right
             anchors.rightMargin: 0
 
-            ROVView.ROVCard {
-                title: "Sensor Data"
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: parent.height/2
-                headerColor: mainColor
-
-                ROVView.ROVGraph {
-                     id: graph
-                     anchors.fill: parent
-                     height: 200
-                     property int minData: -30
-                     property int maxData: 30
-                     property variant data: controller.TempData
-                     property int number: data.length
-                 }
-
-            }
+            ROVView.GUISensorData{}
 
             ROVView.GUIThrusters{}
         }

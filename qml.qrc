@@ -27,5 +27,6 @@
         <file>view/ROVGraph.qml</file>
         <file>view/ROVTelemetry.qml</file>
         <file>view/GUISystemStatus.qml</file>
+        <file>view/GUISensorData.qml</file>
     </qresource>
 </RCC>
