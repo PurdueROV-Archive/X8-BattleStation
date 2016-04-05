@@ -19,7 +19,7 @@ Window {
     visible: true
     width: 1920
     height: 1010
-    //visibility: "Maximized"
+    visibility: "Maximized"
     color: "#151515"
     title: "Purdue IEEE | ROV " + rovName
     objectName: "mainWindow"
@@ -116,10 +116,8 @@ Window {
 
             ROVView.ROVTelemetry{}
 
+
             ROVView.GUIConfiguration{}
-
-
-
         }
 
         //Right Column
