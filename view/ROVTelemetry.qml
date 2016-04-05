@@ -8,6 +8,20 @@ ROVCard {
     height: parent.height/2
     headerColor: mainColor
 
+    Rectangle {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 10
+        anchors.topMargin: 10
+
+        property int size: 20
+        width: size
+        height: size
+        radius: size
+
+        color: controller.Running ? (controller.Communication ? "#22ff22" : "#ff2222") : "#dddddd"
+    }
+
     Item {
         anchors.fill: parent
         Rectangle {
