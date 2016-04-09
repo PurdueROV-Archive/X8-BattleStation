@@ -8,20 +8,19 @@ PacketIn::PacketIn()
 
 }
 
-bool PacketIn::setData(QByteArray bytes) {
-    if (crc8(bytes, sizeOfPacket) == bytes[sizeOfPacket - 2]) {
-    header = bytes[0];
+bool PacketIn::setData(QByteArray byte) {
+    if (crc8(byte, sizeOfPacket) == byte[sizeOfPacket - 2]) {
+    char * bytes = byte.data();
     thrusterStatus = bytes[1];
-    memcpy(&pressure, &pressure, 4);
-    memcpy(&temp, &temp, 4);
-    memcpy(&IMU_Lx, &IMU_Lx, 4);
-    memcpy(&IMU_Ly, &IMU_Ly, 4);
-    memcpy(&IMU_Lz, &IMU_Lz, 4);
-    memcpy(&IMU_Rx, &IMU_Rx, 4);
-    memcpy(&IMU_Ry, &IMU_Ry, 4);
-    memcpy(&IMU_Rz, &IMU_Rz, 4);
-    CRC8_Check = bytes[34];
-    tailByte = bytes[35];
+    memcpy(&pressure, &bytes[2], 4);
+    memcpy(&temp, &bytes[6], 4);
+    memcpy(&IMU_Lx, &bytes[10], 4);
+    memcpy(&IMU_Ly, &bytes[14], 4);
+    memcpy(&IMU_Lz, &bytes[18], 4);
+    memcpy(&IMU_Rx, &bytes[22], 4);
+    memcpy(&IMU_Ry, &bytes[26], 4);
+    memcpy(&IMU_Rz, &bytes[30], 4);
+
     return true;
     }
     return false;

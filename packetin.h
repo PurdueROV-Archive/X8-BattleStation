@@ -28,7 +28,7 @@ public:
 
 private:
     char crc8(QByteArray bytes, int size);
-    char header;
+
     char thrusterStatus;
     float pressure;
     float temp;
@@ -38,8 +38,7 @@ private:
     float IMU_Rx;
     float IMU_Ry;
     float IMU_Rz;
-    char CRC8_Check;
-    char tailByte;
+
 
     int sizeOfPacket = 36;
 
