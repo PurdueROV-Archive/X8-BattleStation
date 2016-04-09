@@ -40,7 +40,7 @@ private:
     float IMU_Rz;
 
 
-    int sizeOfPacket = 36;
+    int sizeOfPacket;
 
 };
 

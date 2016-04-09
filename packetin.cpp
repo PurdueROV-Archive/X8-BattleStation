@@ -5,7 +5,7 @@
 
 PacketIn::PacketIn()
 {
-
+    sizeOfPacket = 36;
 }
 
 bool PacketIn::setData(QByteArray byte) {
