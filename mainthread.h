@@ -37,7 +37,7 @@ private:
     UDPSocket* udp;
     Joystick* joystick;
     ThrustMapper* tmapper;
-    bool checkStart;
+    bool velocitySlowDown;
 
 };
 
