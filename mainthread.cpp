@@ -41,7 +41,7 @@ bool Mainthread::start() {
     joystick->connect();
 
     last_time  = QDateTime::currentMSecsSinceEpoch();
-
+    checkStart = 0;
     return true;
 }
 
@@ -89,8 +89,10 @@ void Mainthread::tick() {
     ControlPacket* cp = new ControlPacket();
     int leftButton = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
     int rightButton = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
-    int checkStart = joystick->getButtonPressed(JOYSTICK_START);
-    if (checkStart == 1) {
+    if (joystick->getButtonPressed(JOYSTICK_START)){
+        checkStart = !checkStart;
+    }
+    if (checkStart) {
         cp->setX((joystick->getAxis(JOYSTICK_LJ_Y)) / 2);
         cp->setY((rightButton - leftButton) * INT_16_MAX/2);
         cp->setZ((joystick->getAxis(JOYSTICK_RTRIGG) / 4) - (joystick->getAxis(JOYSTICK_LTRIGG) / 4));
