@@ -41,7 +41,7 @@ bool Mainthread::start() {
     joystick->connect();
 
     last_time  = QDateTime::currentMSecsSinceEpoch();
-
+    velocitySlowDown = false;
     return true;
 }
 
@@ -87,18 +87,29 @@ void Mainthread::tick() {
 
 
     ControlPacket* cp = new ControlPacket();
-
-    cp->setX(joystick->getAxis(JOYSTICK_LJ_Y));
-
     int leftButton = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
     int rightButton = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
-    cp->setY((rightButton - leftButton) * INT_16_MAX);
+    if (joystick->getButtonPressed(JOYSTICK_START)){
+        velocitySlowDown = !velocitySlowDown;
+    }
+    if (velocitySlowDown) {
+        cp->setX((joystick->getAxis(JOYSTICK_LJ_Y)) / 2);
+        cp->setY((rightButton - leftButton) * INT_16_MAX/2);
+        cp->setZ((joystick->getAxis(JOYSTICK_RTRIGG) / 4) - (joystick->getAxis(JOYSTICK_LTRIGG) / 4));
 
-    cp->setZ((joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2));
-
-    cp->setRoll(joystick->getAxis(JOYSTICK_RJ_X));
-    cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
-    cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
+        cp->setRoll(joystick->getAxis(JOYSTICK_RJ_X)/2);
+        cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y)/2);
+        cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X)/2);
+    }
+    else
+    {
+        cp->setX(joystick->getAxis(JOYSTICK_LJ_Y));
+        cp->setY((rightButton - leftButton) * INT_16_MAX);
+        cp->setZ((joystick->getAxis(JOYSTICK_RTRIGG) / 2) - (joystick->getAxis(JOYSTICK_LTRIGG) / 2));
+        cp->setRoll(joystick->getAxis(JOYSTICK_RJ_X));
+        cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
+        cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
+    }
 
     float rotation = (float) joystick->getAxis(0) / (float) (INT_16_MAX);
     Controller::getInstance()->setRotation(90 * rotation);
