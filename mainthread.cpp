@@ -1,6 +1,6 @@
 #include "mainthread.h"
 #include "controller.h"
-
+#include "packetin.h"
 Mainthread::Mainthread(Joystick* joystick) : QObject() {
 
     //TODO: Pass in other needed objects
@@ -110,6 +110,8 @@ void Mainthread::tick() {
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
+    PacketIn *packet = new PacketIn();
+    if(!packet->setData(returnData)) qDebug("Bad Checksum or no data");
     int size = returnData.size();
     if (size > 0) {
         last_comms = now;
