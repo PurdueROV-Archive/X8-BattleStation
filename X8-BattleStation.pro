@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     joystick.cpp \
     sdlwrap.cpp \
     thrust_mapping/matrices.cpp \
-    thrust_mapping/thrust_mapper.cpp
+    thrust_mapping/thrust_mapper.cpp \
+    packetin.cpp
 
 
 RESOURCES += qml.qrc
@@ -31,7 +32,8 @@ HEADERS += \
     joystick.h \
     sdlwrap.h \
     thrust_mapping/matrices.h \
-    thrust_mapping/thrust_mapper.h
+    thrust_mapping/thrust_mapper.h \
+    packetin.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include
