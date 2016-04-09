@@ -1,6 +1,6 @@
 #ifndef PACKETIN_H
 #define PACKETIN_H
-
+#include "qbytearray.h"
 
 class PacketIn
 {
@@ -23,11 +23,11 @@ public:
 
     float getIMU_Rz();
 
-    bool setData(char *bytes);
+    bool setData(QByteArray bytes);
 
 
 private:
-
+    char crc8(QByteArray bytes, int size);
     char header;
     char thrusterStatus;
     float pressure;

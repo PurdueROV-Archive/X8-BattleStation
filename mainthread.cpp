@@ -107,8 +107,8 @@ void Mainthread::tick() {
 
     udp->send(cp->getPacket());
     QByteArray returnData = udp->read();
-    PacketIn packet = new PacketIn();
-    if (!packet.setData(returnData)) QDebug("Bad Checksum or no data");
+    PacketIn *packet = new PacketIn;
+    if (!packet->setData(returnData)) qDebug("Bad Checksum or no data");
 
 
     lastTime = now;

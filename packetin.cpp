@@ -1,6 +1,6 @@
 #include "packetin.h"
 
-
+#include "qbytearray.h"
 
 
 PacketIn::PacketIn()
@@ -8,8 +8,7 @@ PacketIn::PacketIn()
 
 }
 
-bool PacketIn::setData(char *bytes) {
-    if (bytes == NULL) return NULL;
+bool PacketIn::setData(QByteArray bytes) {
     if (crc8(bytes, sizeOfPacket) == bytes[sizeOfPacket - 2]) {
     header = bytes[0];
     thrusterStatus = bytes[1];
@@ -68,7 +67,7 @@ float PacketIn::getIMU_Rz(){
 
 
 
-char PacketIn::crc8(char bytes[], int size) {
+char PacketIn::crc8(QByteArray bytes, int size) {
     char crc = 0;
     char val;
     char mix;
