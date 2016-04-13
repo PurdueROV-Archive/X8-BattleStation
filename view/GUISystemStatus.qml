@@ -25,4 +25,9 @@ ROVCard {
 
     ROVTelemetry{}
 
+    ROVHeight{
+    id: rov
+    property real deep: mainWindow.depth
+    }
+
 }

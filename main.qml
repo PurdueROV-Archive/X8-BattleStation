@@ -15,6 +15,8 @@ Window {
     property string mainColor:  slate
     property string mainAccent: amber
 
+    property real depth: 8
+
     id: mainWindow
     visible: true
     width: 1920
@@ -118,6 +120,8 @@ Window {
 
 
             ROVView.GUIConfiguration{}
+
+
         }
 
         //Right Column
