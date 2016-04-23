@@ -92,6 +92,7 @@ void Mainthread::tick() {
     if (joystick->getButtonPressed(JOYSTICK_START)){
         velocitySlowDown = !velocitySlowDown;
     }
+    //Slow down the ROV
     if (velocitySlowDown) {
         cp->setX((joystick->getAxis(JOYSTICK_LJ_Y)) / 2);
         cp->setY((rightButton - leftButton) * INT_16_MAX/2);
