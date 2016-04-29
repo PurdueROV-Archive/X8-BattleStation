@@ -41,7 +41,7 @@ quint8 ControlPacket::crc(QByteArray data) {
 
         quint8 inbyte = data.at(i);
 
-        for (int i = 8; i; i--) {
+        for (int j = 8; j; j--) {
             quint8 mix = (crc ^ inbyte) & 0x01;
             crc >>= 1;
             if (mix) crc ^= 0xD5;
@@ -82,6 +82,16 @@ void ControlPacket::assemblePacket() {
     data[PACKET_SIZE-1] = TAIL;
 
     data[PACKET_SIZE-2] = crc(data);
+}
+
+void ControlPacket::safety() {
+    this->setX(0);
+    this->setY(0);
+    this->setZ(0);
+
+    this->setRoll(0);
+    this->setPitch(0);
+    this->setYaw(0);
 }
 
 QByteArray ControlPacket::getPacket() {

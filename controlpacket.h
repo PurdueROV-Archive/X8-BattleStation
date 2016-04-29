@@ -3,7 +3,7 @@
 
 #include <QByteArray>
 
-#define PACKET_SIZE 30
+#define PACKET_SIZE 31
 
 #define HEADER 0x12
 #define TAIL   0x13
@@ -27,6 +27,8 @@ public:
     void setRoll (qint16 roll);
     void setPitch(qint16 pitch);
     void setYaw  (qint16 yaw);
+
+    void safety();
 
     void reset();
 

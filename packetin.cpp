@@ -70,6 +70,7 @@ char PacketIn::crc8(QByteArray bytes, int size) {
     char crc = 0;
     char val;
     char mix;
+
     for (int i = 1; i < size - 2; ++i) {
       val = bytes[i];
       for (int j = 8; j; --j) {

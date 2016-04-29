@@ -38,6 +38,7 @@ private:
     Joystick* joystick;
     ThrustMapper* tmapper;
     bool velocitySlowDown;
+    int lastThrusters[8] = {0,0,0,0,0,0,0,0};
 
 };
 

@@ -1,6 +1,30 @@
 #include "mainthread.h"
 #include "controller.h"
 #include "packetin.h"
+
+
+void normalize(int values[], int size) {
+    int valuesMax = 0;
+    int max = INT_16_MAX;
+
+    //get Max value
+    for (int i = 0; i < size; i++) {
+        if (abs(values[i]) > max) {
+            valuesMax = abs(values[i]);
+        }
+    }
+
+    if (valuesMax > max) {
+        //Normalize the values based off max
+        float n = ((float) max) / ((float) valuesMax);
+        for (int i = 0; i < size; i++) {
+            values[i] = (int) (n * values[i]);
+        }
+    }
+}
+
+
+
 Mainthread::Mainthread(Joystick* joystick) : QObject() {
 
     //TODO: Pass in other needed objects
@@ -63,8 +87,9 @@ void Mainthread::tick() {
     joystick->update();
 
     Controller::getInstance()->addTempData(qrand() % ((18 + 1) + 10) -10);
+     ControlPacket* cp = new ControlPacket();
 
-    vect6 targetvector;
+    /*vect6 targetvector;
     tmapper->changeMapperMatrix(246);
 
     targetvector.L.x = joystick->getAxis(JOYSTICK_LJ_Y);
@@ -83,12 +108,11 @@ void Mainthread::tick() {
     vect8 m = tmapper->thrust_map;
 
     int thrusters[8] = {m.a, m.b, m.c, m.d, m.e, m.f, m.g, m.h};
-    Controller::getInstance()->SetThrusterValues(thrusters);
 
-
-    ControlPacket* cp = new ControlPacket();
     int leftButton = joystick->getButtonState(JOYSTICK_LEFTBUTTON);
     int rightButton = joystick->getButtonState(JOYSTICK_RIGHTBUTTON);
+
+
     if (joystick->getButtonPressed(JOYSTICK_START)){
         velocitySlowDown = !velocitySlowDown;
     }
@@ -109,45 +133,127 @@ void Mainthread::tick() {
         cp->setRoll(joystick->getAxis(JOYSTICK_RJ_X));
         cp->setPitch(joystick->getAxis(JOYSTICK_RJ_Y));
         cp->setYaw(joystick->getAxis(JOYSTICK_LJ_X));
+    }*/
+
+    //Calculate Thruster Values
+
+    //Y (Ascend and descend)
+    int velY = joystick->getAxis(JOYSTICK_RTRIGG) - joystick->getAxis(JOYSTICK_LTRIGG);
+
+    //X (Strafe left and right)
+    int velX = 0;
+    if (joystick->getButtonState(JOYSTICK_LEFTBUTTON)) velX += INT_16_MIN;
+    if (joystick->getButtonState(JOYSTICK_RIGHTBUTTON)) velX += INT_16_MAX;
+
+    //Z (forward and backword)
+    int velZ = joystick->getAxis(JOYSTICK_LJ_Y);
+
+    //Yaw (rotate clockwise and counter-clockwise)
+    int yaw = joystick->getAxis(JOYSTICK_LJ_X) * -1;
+    //Pitch (rotate forward and backward)
+    int pitch = joystick->getAxis(JOYSTICK_RJ_Y);
+
+    //Roll (rotate left to right)
+    int roll = joystick->getAxis(JOYSTICK_RJ_X);
+
+
+    velY = velY * 0.5;
+    velX = velX * 0.5;
+    velZ = velZ * 0.5;
+
+    yaw = yaw * 0.15;
+    pitch = pitch * 0.4;
+    roll = roll * 0.4;
+
+
+    int thrusters[8] = {0,0,0,0,0,0,0,0};
+    int* horizontalThrusters = thrusters;
+    int* verticalThrusters = thrusters + 4;
+
+    horizontalThrusters[0] += velX;
+    horizontalThrusters[1] -= velX;
+    horizontalThrusters[2] += velX;
+    horizontalThrusters[3] -= velX;
+
+    verticalThrusters[0] += velY;
+    verticalThrusters[1] += velY;
+    verticalThrusters[2] += velY;
+    verticalThrusters[3] += velY;
+
+    horizontalThrusters[0] += velZ;
+    horizontalThrusters[1] += velZ;
+    horizontalThrusters[2] -= velZ;
+    horizontalThrusters[3] -= velZ;
+
+    verticalThrusters[0] += pitch;
+    verticalThrusters[1] += pitch;
+    verticalThrusters[2] -= pitch;
+    verticalThrusters[3] -= pitch;
+
+    horizontalThrusters[0] -= yaw;
+    horizontalThrusters[1] += yaw;
+    horizontalThrusters[2] += yaw;
+    horizontalThrusters[3] -= yaw;
+
+    verticalThrusters[0] += roll;
+    verticalThrusters[1] -= roll;
+    verticalThrusters[2] += roll;
+    verticalThrusters[3] -= roll;
+
+    int diff = 2000;
+    for (int i = 0; i < 8; i++) {
+       if (abs(thrusters[i] - lastThrusters[i]) > diff) {
+           if (lastThrusters[i] < thrusters[i]) {
+               thrusters[i] = lastThrusters[i] + diff;
+           } else if (lastThrusters[i] > thrusters[i]) {
+               thrusters[i] = lastThrusters[i] - diff;
+           }
+       }
+       lastThrusters[i] = thrusters[i];
     }
 
-    float rotation = (float) joystick->getAxis(0) / (float) (INT_16_MAX);
-    Controller::getInstance()->setRotation(90 * rotation);
+    normalize(horizontalThrusters, 4);
+    normalize(verticalThrusters, 4);
 
-    float pitch = (float) joystick->getAxis(1) / (float) (INT_16_MAX);
-    Controller::getInstance()->setPitch(90 * pitch);
+    Controller::getInstance()->SetThrusterValues(thrusters);
 
-    //cp->print();
+    cp->setX(horizontalThrusters[0]);
+    cp->setY(horizontalThrusters[1]);
+    cp->setZ(horizontalThrusters[2]);
+
+    cp->setRoll(horizontalThrusters[3]);
+    cp->setPitch(verticalThrusters[1]);
+    cp->setYaw(verticalThrusters[2] * 0.95);
+
+    if (now - last_comms > (500 + TICK_INTERVAL)) {
+       cp->safety();
+    }
+
+    cp->print();
 
     udp->send(cp->getPacket());
+
     QByteArray returnData = udp->read();
-    PacketIn *packet = new PacketIn();
-    if(!packet->setData(returnData)) qDebug("Bad Checksum or no data");
-    int size = returnData.size();
-    if (size > 0) {
+
+    if (returnData.size() > 0) {
         last_comms = now;
 
-        for (int i = 0; i < size; i++) {
-           qDebug("[%d]: %u", i, (quint8) returnData.at(i));
-        }
+    //        PacketIn *packet = new PacketIn();
 
-        qint16 printA = 0;
-        memcpy(&printA, &returnData.constData()[1], 2);
+    //        if (!packet->setData(returnData)){
+    //            qDebug("Bad Checksum or no data");
+    //        }
 
-        qint16 printB = 0;
-        memcpy(&printB, &returnData.constData()[3], 2);
+    //        delete packet;
+    }
 
-        qint16 printC = 0;
-        memcpy(&printC, &returnData.constData()[5], 2);
-        qDebug("A: %d", printA);
-
-        qDebug("B: %d", printB);
-
-        qDebug("C: %d", printC);
-
+    if (now - last_comms > 500) {
+        cp->safety();
     }
 
     Controller::getInstance()->SetCommunication(now - last_comms < 500);
+
+    delete cp;
 
     last_time = now;
 }
