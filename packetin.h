@@ -1,6 +1,7 @@
 #ifndef PACKETIN_H
 #define PACKETIN_H
-#include "qbytearray.h"
+
+#include <QByteArray>
 
 class PacketIn
 {

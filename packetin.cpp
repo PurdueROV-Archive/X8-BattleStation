@@ -1,8 +1,5 @@
 #include "packetin.h"
 
-#include "qbytearray.h"
-
-
 PacketIn::PacketIn()
 {
     sizeOfPacket = 36;

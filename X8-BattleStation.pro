@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     sdlwrap.cpp \
     thrust_mapping/matrices.cpp \
     thrust_mapping/thrust_mapper.cpp \
-    packetin.cpp
+    packetin.cpp \
+    utilities.cpp
 
 
 RESOURCES += qml.qrc
@@ -33,7 +34,8 @@ HEADERS += \
     sdlwrap.h \
     thrust_mapping/matrices.h \
     thrust_mapping/thrust_mapper.h \
-    packetin.h
+    packetin.h \
+    utilities.h
 
 win32 {
     INCLUDEPATH += $$PWD/input/SDL/include
