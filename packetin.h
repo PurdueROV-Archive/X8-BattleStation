@@ -2,50 +2,51 @@
 #define PACKETIN_H
 
 #include <QByteArray>
+#include "utilities.h"
+
+#define PACKET_SIZE 33
+#define SENSOR_DATA 0x01
 
 class PacketIn
 {
 public:
     PacketIn();
     char getThrusterStatus() ;
+
     float getPressure();
 
-    float getTemp();
+    float getTemperature();
 
-    float getIMU_Lx();
+    qint16 getIMU_X();
 
-    float getIMU_Ly();
+    qint16 getIMU_Y();
 
-    float getIMU_Lz();
+    qint16 getIMU_Z();
 
-    float getIMU_Rx();
+    qint16 getIMU_Roll();
 
-    float getIMU_Ry();
+    qint16 getIMU_Pitch();
 
-    float getIMU_Rz();
+    qint16 getIMU_Yaw();
 
-    bool setData(QByteArray bytes);
+    qint8* getThrusterValues();
 
+    bool parseData(QByteArray data);
+
+    void print();
 
 private:
-    char crc8(QByteArray bytes, int size);
-
-    char thrusterStatus;
-    float pressure;
-    float temp;
-    float IMU_Lx;
-    float IMU_Ly;
-    float IMU_Lz;
-    float IMU_Rx;
-    float IMU_Ry;
-    float IMU_Rz;
-
-
-    int sizeOfPacket;
-
+    quint8 thrusterStatus;
+    float  pressure;
+    float  temperature;
+    qint16 IMU_X;
+    qint16 IMU_Y;
+    qint16 IMU_Z;
+    qint16 IMU_Roll;
+    qint16 IMU_Pitch;
+    qint16 IMU_Yaw;
+    qint8  thrusterValues[8];
 };
-
-
 
 
 #endif // PACKETIN_H

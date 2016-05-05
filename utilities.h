@@ -1,6 +1,9 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <QtGlobal>
+#include <QByteArray>
+
 
 class Utilities
 {

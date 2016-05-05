@@ -64,12 +64,12 @@ private:
 
     void assemblePacket();
 
-    qint8 x;
-    qint8 y;
-    qint8 z;
-    qint8 roll;
-    qint8 pitch;
-    qint8 yaw;
+    qint16 x;
+    qint16 y;
+    qint16 z;
+    qint16 roll;
+    qint16 pitch;
+    qint16 yaw;
 
     qint8 cameraAngle;
 

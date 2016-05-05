@@ -1,27 +1,35 @@
 #include "packetin.h"
 
-PacketIn::PacketIn()
-{
-    sizeOfPacket = 36;
-}
+PacketIn::PacketIn() {}
 
-bool PacketIn::setData(QByteArray byte) {
-    if (crc8(byte, sizeOfPacket) == byte[sizeOfPacket - 2]) {
-    char * bytes = byte.data();
-    thrusterStatus = bytes[1];
-    memcpy(&pressure, &bytes[2], 4);
-    memcpy(&temp, &bytes[6], 4);
-    memcpy(&IMU_Lx, &bytes[10], 4);
-    memcpy(&IMU_Ly, &bytes[14], 4);
-    memcpy(&IMU_Lz, &bytes[18], 4);
-    memcpy(&IMU_Rx, &bytes[22], 4);
-    memcpy(&IMU_Ry, &bytes[26], 4);
-    memcpy(&IMU_Rz, &bytes[30], 4);
+bool PacketIn::parseData(QByteArray data) {
+
+//    if (data.at(1) != SENSOR_DATA) {
+//        return false;
+//    }
+
+    if (data.size() < PACKET_SIZE) {
+        return false;
+    }
+
+    if (Utilities::crc(data) != data.at(PACKET_SIZE - 2)) {
+        return false;
+    }
+
+    thrusterStatus = data.at(2);
+
+    memcpy(&pressure,    &data.constData()[3],  4);
+    memcpy(&temperature, &data.constData()[7],  4);
+    memcpy(&IMU_X,       &data.constData()[11], 2);
+    memcpy(&IMU_Y,       &data.constData()[13], 2);
+    memcpy(&IMU_Z,       &data.constData()[15], 2);
+    memcpy(&IMU_Roll,    &data.constData()[17], 2);
+    memcpy(&IMU_Pitch,   &data.constData()[19], 2);
+    memcpy(&IMU_Yaw,     &data.constData()[21], 2);
+
+    memcpy(&thrusterValues, &data.constData()[23], 8);
 
     return true;
-    }
-    return false;
-
 }
 
 char PacketIn::getThrusterStatus() {
@@ -32,53 +40,68 @@ float PacketIn::getPressure(){
     return pressure;
 }
 
-float PacketIn::getTemp() {
-    return temp;
+float PacketIn::getTemperature() {
+    return temperature;
 }
 
-float PacketIn::getIMU_Lx() {
-    return IMU_Lx;
+qint16 PacketIn::getIMU_X() {
+    return IMU_X;
 }
 
-float PacketIn::getIMU_Ly(){
-    return IMU_Ly;
+qint16 PacketIn::getIMU_Y(){
+    return IMU_Y;
 }
 
-float PacketIn::getIMU_Lz(){
-    return IMU_Lz;
+qint16 PacketIn::getIMU_Z(){
+    return IMU_Z;
 }
 
-float PacketIn::getIMU_Rx(){
-    return IMU_Rx;
+qint16 PacketIn::getIMU_Roll(){
+    return IMU_Roll;
 }
 
-float PacketIn::getIMU_Ry(){
-    return IMU_Ry;
+qint16 PacketIn::getIMU_Pitch(){
+    return IMU_Pitch;
 }
 
-float PacketIn::getIMU_Rz(){
-    return IMU_Rz;
+qint16 PacketIn::getIMU_Yaw(){
+    return IMU_Yaw;
 }
 
-
-
-
-char PacketIn::crc8(QByteArray bytes, int size) {
-    char crc = 0;
-    char val;
-    char mix;
-    for (int i = 1; i < size - 2; ++i) {
-      val = bytes[i];
-      for (int j = 8; j; --j) {
-        mix = (crc ^ val) & 0x01;
-        crc >>= 1;
-        if (mix) {
-          crc ^= 0xD5;
-        }
-        val >>= 1;
-      }
-    }
-    return crc;
+qint8* PacketIn::getThrusterValues() {
+    return thrusterValues;
 }
 
+void PacketIn::print() {
 
+//    quint8 tStatus = this->getThrusterStatus();
+//    qDebug("T. Stat:\t %d %d %d %d %d %d %d %d",
+//           tStatus & 0x80 ? 1 : 0,
+//           tStatus & 0x40 ? 1 : 0,
+//           tStatus & 0x20 ? 1 : 0,
+//           tStatus & 0x10 ? 1 : 0,
+//           tStatus & 0x08 ? 1 : 0,
+//           tStatus & 0x04 ? 1 : 0,
+//           tStatus & 0x02 ? 1 : 0,
+//           tStatus & 0x01 ? 1 : 0
+//           );
+
+//    qDebug("Pressure:\t %f", this->getPressure());
+//    qDebug("Temp:\t %f", this->getTemperature());
+
+//    qDebug("IMU X:\t %d", this->getIMU_X());
+//    qDebug("IMU Y:\t %d", this->getIMU_Y());
+//    qDebug("IMU Z:\t %d", this->getIMU_Z());
+
+        qDebug("%d %d %d", this->getIMU_X(), this->getIMU_Y(), this->getIMU_Z());
+
+//    qDebug("IMU Roll:\t %d", this->getIMU_Roll());
+//    qDebug("IMU Pitch:\t %d", this->getIMU_Pitch());
+//    qDebug("IMU Yaw:\t %d", this->getIMU_Yaw());
+
+//      qDebug("%d %d %d %d %d %d %d %d",
+//              this->getThrusterValues()[0], this->getThrusterValues()[1], this->getThrusterValues()[2], this->getThrusterValues()[3],
+//              this->getThrusterValues()[4], this->getThrusterValues()[5], this->getThrusterValues()[6], this->getThrusterValues()[7]);
+
+      //qDebug("%.3f, %.3f, %.3f, %.3f", this->getPressure(), (float) this->getIMU_Roll()/16, (float) this->getIMU_Pitch()/16, (float)this->getIMU_Yaw()/16);
+}

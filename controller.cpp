@@ -138,11 +138,11 @@ QStringList Controller::ThrusterValues() const {
     return thrusterValues;
 }
 
-void Controller::SetThrusterValues(int values[]) {
+void Controller::SetThrusterValues(qint8 values[]) {
     thrusterValues.clear();
 
     for (int i = 0; i < 8; i++) {
-       QString val = QString("%1").arg(values[i]/32);
+       QString val = QString("%1").arg(values[i]);
        thrusterValues.append(val + "");
     }
 

@@ -1,10 +1,10 @@
 #include "utilities.h"
 
-qint32 rangeMap(qint32 x, qint32 in_min, qint32 in_max, qint32 out_min, qint32 out_max) {
+qint32 Utilities::rangeMap(qint32 x, qint32 in_min, qint32 in_max, qint32 out_min, qint32 out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-quint8 ControlPacket::crc(QByteArray data) {
+quint8 Utilities::crc(QByteArray data) {
     quint8 crc = 0;
     int size = data.size();
 

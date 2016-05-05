@@ -132,7 +132,7 @@ public:
     QStringList ThrusterValues() const;
 
     //Write Property
-    void SetThrusterValues(int values[]);
+    void SetThrusterValues(qint8 values[]);
 
 private: //Dependencies
     QStringList thrusterValues;

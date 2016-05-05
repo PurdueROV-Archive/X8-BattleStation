@@ -104,12 +104,26 @@ void ControlPacket::assemblePacket() {
     data[0] = HEADER;
     data[1] = CONTROL;
 
-    memcpy(&this->x,     &data[2],  2);
-    memcpy(&this->y,     &data[4],  2);
-    memcpy(&this->z,     &data[6],  2);
-    memcpy(&this->roll,  &data[8],  2);
-    memcpy(&this->pitch, &data[10], 2);
-    memcpy(&this->yaw,   &data[12], 2);
+    quint8 tmp[2];
+
+    memcpy(tmp,  &this->x, 2);
+    data[2] = tmp[0];
+    data[3] = tmp[1];
+    memcpy(tmp,  &this->y,  2);
+    data[4] = tmp[0];
+    data[5] = tmp[1];
+    memcpy(tmp,  &this->z, 2);
+    data[6] = tmp[0];
+    data[7] = tmp[1];
+    memcpy(tmp,  &this->roll, 2);
+    data[8] = tmp[0];
+    data[9] = tmp[1];
+    memcpy(tmp, &this->pitch, 2);
+    data[10] = tmp[0];
+    data[11] = tmp[1];
+    memcpy(tmp, &this->yaw, 2);
+    data[12] = tmp[0];
+    data[13] = tmp[1];
 
     data[14] = this->cameraAngle;
 
@@ -141,10 +155,19 @@ void ControlPacket::assemblePacket() {
                (this->pitchLock << 1) +
                (this->rollLock  << 0);
 
-    memcpy(&this->rotationPConst, &data[20], 2);
-    memcpy(&this->rotationIConst, &data[22], 2);
-    memcpy(&this->locationPConst, &data[24], 2);
-    memcpy(&this->locationIConst, &data[26], 2);
+
+    memcpy(tmp, &this->rotationPConst, 2);
+    data[20] = tmp[0];
+    data[21] = tmp[1];
+    memcpy(tmp, &this->rotationIConst, 2);
+    data[22] = tmp[0];
+    data[23] = tmp[1];
+    memcpy(tmp, &this->locationPConst, 2);
+    data[24] = tmp[0];
+    data[25] = tmp[1];
+    memcpy(tmp, &this->locationIConst, 2);
+    data[26] = tmp[0];
+    data[27] = tmp[1];
 
     data[28] = this->pivotX;
     data[29] = this->pivotY;
@@ -200,8 +223,10 @@ void ControlPacket::defaults() {
 void ControlPacket::print() {
     assemblePacket();
 
+    /*
     qDebug("Header:\t\t 0x%x", data.at(0));
     qDebug("Control:\t 0x0%x", data.at(1));
+    */
 
     qint16 printX = 0;
     memcpy(&printX, &data.constData()[2], 2);
@@ -212,9 +237,11 @@ void ControlPacket::print() {
     qint16 printZ = 0;
     memcpy(&printZ, &data.constData()[6], 2);
 
+    /*
     qDebug("X:\t\t %d", printX);
     qDebug("Y:\t\t %d", printY);
     qDebug("Z:\t\t %d", printZ);
+    */
 
     qint16 printRoll = 0;
     memcpy(&printRoll, &data.constData()[8], 2);
@@ -225,10 +252,16 @@ void ControlPacket::print() {
     qint16 printYaw = 0;
     memcpy(&printYaw, &data.constData()[12], 2);
 
+    /*
     qDebug("Roll:\t\t %d",  printRoll);
     qDebug("Pitch:\t\t %d", printPitch);
     qDebug("Yaw:\t\t %d",   printYaw);
+    */
 
+    qDebug("%d %d %d %d %d %d", printX, printY, printZ, printRoll, printPitch, printYaw);
+
+
+    /*
     qDebug("Cam:\t\t %u", (quint8) data.at(14));
 
     qDebug("Snoids:\t\t %d%d %d%d %d%d %d%d",
@@ -260,13 +293,13 @@ void ControlPacket::print() {
 
     // Print Extra Info if PID Tuning is On
     if (data.at(19)) {
-        qDebug("X Lock:\t %d\n",     data.at(19) & 0x20 ? "Yes" : "No");
-        qDebug("Y Lock:\t %d\n",     data.at(19) & 0x10 ? "Yes" : "No");
-        qDebug("Z Lock:\t %d\n",     data.at(19) & 0x08 ? "Yes" : "No");
+        qDebug("X Lock:\t %s\n",     data.at(19) & 0x20 ? "Yes" : "No");
+        qDebug("Y Lock:\t %s\n",     data.at(19) & 0x10 ? "Yes" : "No");
+        qDebug("Z Lock:\t %s\n",     data.at(19) & 0x08 ? "Yes" : "No");
 
-        qDebug("Roll Lock:\t %d\n",  data.at(19) & 0x04 ? "Yes" : "No");
-        qDebug("Pitch Lock:\t %d\n", data.at(19) & 0x02 ? "Yes" : "No");
-        qDebug("Yaw Lock:\t %d\n",   data.at(19) & 0x01 ? "Yes" : "No");
+        qDebug("Roll Lock:\t %s\n",  data.at(19) & 0x04 ? "Yes" : "No");
+        qDebug("Pitch Lock:\t %s\n", data.at(19) & 0x02 ? "Yes" : "No");
+        qDebug("Yaw Lock:\t %s\n",   data.at(19) & 0x01 ? "Yes" : "No");
     }
 
     qint16 printRotationP = 0;
@@ -292,4 +325,5 @@ void ControlPacket::print() {
 
     qDebug("Check:\t\t 0x%x", (quint8) data.at(PACKET_SIZE-2));
     qDebug("Tail:\t\t 0x%x", data.at(PACKET_SIZE-1));
+    */
 }
