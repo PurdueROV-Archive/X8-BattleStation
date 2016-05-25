@@ -10,9 +10,9 @@ ROVCard {
 
     //Status Indicator
     Rectangle {
-        anchors.right: parent.right
+        anchors.left: parent.left
         anchors.top: parent.top
-        anchors.rightMargin: 10
+        anchors.leftMargin: 10
         anchors.topMargin: 10
 
         property int size: 20
