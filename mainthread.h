@@ -12,7 +12,7 @@
 #include "thrust_mapping/matrices.h"
 #include "thrust_mapping/thrust_mapper.h"
 
-#define TICK_INTERVAL 50
+#define TICK_INTERVAL 20
 
 class Mainthread : public QObject
 {

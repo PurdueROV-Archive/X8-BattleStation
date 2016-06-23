@@ -126,9 +126,7 @@ void Mainthread::tick() {
 
     }
 
-    Controller::getInstance()->SetCommunication(now - last_comms < 50);
-
-    //delete cp;
+    Controller::getInstance()->SetCommunication(now - last_comms < 150);
 
     last_time = now;
 }

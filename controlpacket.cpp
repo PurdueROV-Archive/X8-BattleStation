@@ -5,6 +5,10 @@ ControlPacket::ControlPacket() {
     this->defaults();
 }
 
+ControlPacket::~ControlPacket() {
+
+}
+
 void ControlPacket::setX(qint16 x) {
     this->x = x;
 }
@@ -46,14 +50,6 @@ void ControlPacket::setSolenoid4(bool on) {
     this->solenoid4 = on;
 }
 
-void ControlPacket::setHydraulicPump(quint8 value) {
-    this->hydraulicPumpValue = value;
-}
-
-void ControlPacket::setLEDValue(quint8 value) {
-    this->ledValue = value;
-}
-
 void ControlPacket::setThrusterStatus(bool t1, bool t2, bool t3, bool t4, bool t5, bool t6, bool t7, bool t8) {
     this->thrusterStatus[0] = t1;
     this->thrusterStatus[1] = t2;
@@ -88,16 +84,6 @@ void ControlPacket::setLocationPConst(qint16 pValue){
 }
 void ControlPacket::setLocationIConst(qint16 iValue){
     this->locationIConst = iValue;
-}
-
-void ControlPacket::setPivotX(qint8 value){
-    this->pivotX = value;
-}
-void ControlPacket::setPivotY(qint8 value){
-    this->pivotY = value;
-}
-void ControlPacket::setPivotZ(qint8 value){
-    this->pivotZ = value;
 }
 
 void ControlPacket::assemblePacket() {
@@ -135,11 +121,7 @@ void ControlPacket::assemblePacket() {
 
     data[15] = solenoidByte;
 
-    data[16] = this->hydraulicPumpValue;
-
-    data[17] = this->ledValue;
-
-    data[18] = (this->thrusterStatus[0] << 7) +
+    data[16] = (this->thrusterStatus[0] << 7) +
                (this->thrusterStatus[1] << 6) +
                (this->thrusterStatus[2] << 5) +
                (this->thrusterStatus[3] << 4) +
@@ -148,7 +130,7 @@ void ControlPacket::assemblePacket() {
                (this->thrusterStatus[6] << 1) +
                (this->thrusterStatus[7] << 0);
 
-    data[19] = (this->zLock     << 5) +
+    data[17] = (this->zLock     << 5) +
                (this->yLock     << 4) +
                (this->zLock     << 3) +
                (this->yawLock   << 2) +
@@ -157,22 +139,17 @@ void ControlPacket::assemblePacket() {
 
 
     memcpy(tmp, &this->rotationPConst, 2);
+    data[18] = tmp[0];
+    data[19] = tmp[1];
+    memcpy(tmp, &this->rotationIConst, 2);
     data[20] = tmp[0];
     data[21] = tmp[1];
-    memcpy(tmp, &this->rotationIConst, 2);
+    memcpy(tmp, &this->locationPConst, 2);
     data[22] = tmp[0];
     data[23] = tmp[1];
-    memcpy(tmp, &this->locationPConst, 2);
+    memcpy(tmp, &this->locationIConst, 2);
     data[24] = tmp[0];
     data[25] = tmp[1];
-    memcpy(tmp, &this->locationIConst, 2);
-    data[26] = tmp[0];
-    data[27] = tmp[1];
-
-    data[28] = this->pivotX;
-    data[29] = this->pivotY;
-    data[30] = this->pivotZ;
-
 
     data[PACKET_SIZE-2] = CRC_BYTE;
     data[PACKET_SIZE-1] = TAIL;
@@ -201,10 +178,6 @@ void ControlPacket::defaults() {
     setSolenoid3(0);
     setSolenoid4(0);
 
-    setHydraulicPump(0);
-
-    setLEDValue(0);
-
     setThrusterStatus(1,1,1,1,1,1,1,1);
 
     setStabilizationLock(0,0,0,0,0,0);
@@ -214,10 +187,6 @@ void ControlPacket::defaults() {
 
     setLocationPConst(0);
     setLocationIConst(0);
-
-    setPivotX(0);
-    setPivotY(0);
-    setPivotZ(0);
 }
 
 void ControlPacket::print() {

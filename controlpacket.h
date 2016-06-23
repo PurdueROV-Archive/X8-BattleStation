@@ -4,7 +4,7 @@
 #include <QByteArray>
 #include "utilities.h"
 
-#define PACKET_SIZE 33
+#define PACKET_SIZE 28
 
 #define HEADER 0x12
 #define TAIL   0x13
@@ -36,10 +36,6 @@ public:
     void setSolenoid3(bool on);
     void setSolenoid4(bool on);
 
-    void setHydraulicPump(quint8 value);
-
-    void setLEDValue(quint8 value);
-
     void setThrusterStatus(bool t1, bool t2, bool t3, bool t4, bool t5, bool t6, bool t7, bool t8);
 
     void setStabilizationLock(bool x, bool y, bool z, bool roll, bool pitch, bool yaw);
@@ -49,10 +45,6 @@ public:
 
     void setLocationPConst(qint16 pValue);
     void setLocationIConst(qint16 iValue);
-
-    void setPivotX(qint8 value);
-    void setPivotY(qint8 value);
-    void setPivotZ(qint8 value);
 
     void defaults();
 
@@ -78,10 +70,6 @@ private:
     bool solenoid3;
     bool solenoid4;
 
-    quint8 hydraulicPumpValue;
-
-    quint8 ledValue;
-
     bool thrusterStatus[8];
 
     bool rollLock;
@@ -97,10 +85,6 @@ private:
 
     qint16 locationPConst;
     qint16 locationIConst;
-
-    qint8 pivotX;
-    qint8 pivotY;
-    qint8 pivotZ;
 };
 
 #endif // CONTROLPACKET_H
